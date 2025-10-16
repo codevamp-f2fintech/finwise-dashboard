@@ -5,14 +5,15 @@ export const maxDuration = 30
 
 export async function POST(req: Request) {
   try {
-    const apiKey = process.env.GEMINI_API_KEY
+    const apiKey = process.env.NEXT_PUBLIC_API_KEY
     if (!apiKey) {
-      return Response.json({ error: "GEMINI_API_KEY environment variable is not set" }, { status: 500 })
+      return Response.json({ error: "NEXT_PUBLIC_API_KEY environment variable is not set" }, { status: 500 })
     }
 
     const body = await req.json()
     const { messages } = body
 
+    console.log("NEXT_PUBLIC_API_KEY", apiKey)
     console.log("[v0] Received messages:", messages)
 
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
