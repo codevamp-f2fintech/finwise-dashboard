@@ -285,9 +285,9 @@ export function ChatAssistant ( { stage, customerInfo }: ChatAssistantProps ) {
           </div>
 
           {/* Quick Topics Chips */}
-          <div className="border-t border-gray-300 bg-white p-3">
+          <div className="border-t border-gray-300 bg-white p-3 min-h-[20vh]">
             <div className="flex items-center gap-2 mb-2">
-              <Sparkles className="h-4 w-4 text-[#008069] shrink-0" />
+              <Sparkles className="h-4 w-4 text-[#008069]" />
               <span className="text-sm text-gray-600 font-medium">Quick Topics</span>
             </div>
             <ScrollArea className="w-full">

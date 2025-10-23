@@ -19,11 +19,11 @@ export interface Lender {
     eligibilityCriteria?: string
     // Add filtering criteria
     eligibility?: {
-        employmentTypes: string[]
-        minIncome: number // monthly income in rupees
+        employmentTypes?: string[]
+        minIncome?: number // monthly income in rupees
         maxIncome?: number // monthly income in rupees
-        minLoanAmount: number
-        maxLoanAmount: number
+        minLoanAmount?: number
+        maxLoanAmount?: number
         businessMinTurnover?: number // annual turnover for business owners
     }
 }
@@ -59,7 +59,10 @@ export const mockLenders: Lender[] = [
             "6 months banking",
             "Residence proof (Rent Agreement if not OHP)"
         ],
-        eligibilityCriteria: "CIBIL ≥700; Live USL ≤6; Enquiries ≤2 (L6m); ABB to EMI ≥2×; Banking vintage ≥6m"
+        eligibilityCriteria: "CIBIL ≥700; Live USL ≤6; Enquiries ≤2 (L6m); ABB to EMI ≥2×; Banking vintage ≥6m",
+        eligibility: {
+            employmentTypes: [ "doctor", "ca" ],
+        }
     },
     {
         id: "2",
@@ -89,7 +92,10 @@ export const mockLenders: Lender[] = [
             "Udyam/Practice registration; GST if applicable",
             "Own-house proof (OHP) / stable residence"
         ],
-        eligibilityCriteria: "CIBIL ≥700; FOIR ≤65%; ABB to EMI ≥2×; Clean banking ≥6m"
+        eligibilityCriteria: "CIBIL ≥700; FOIR ≤65%; ABB to EMI ≥2×; Clean banking ≥6m",
+        eligibility: {
+            employmentTypes: [ "doctor", "ca" ],
+        }
     },
     {
         id: "3",
@@ -119,7 +125,10 @@ export const mockLenders: Lender[] = [
             "OHP (residential stability)",
             "6m banking if foreign degree or exposure high"
         ],
-        eligibilityCriteria: "CIBIL ≥725 (≥700 RCM); ABB to EMI ≥1.5× if ticket>₹15L; FOIR ≤65 % "
+        eligibilityCriteria: "CIBIL ≥725 (≥700 RCM); ABB to EMI ≥1.5× if ticket>₹15L; FOIR ≤65 % ",
+        eligibility: {
+            employmentTypes: [ "doctor", "ca" ],
+        }
     },
     {
         id: "4",
@@ -149,7 +158,10 @@ export const mockLenders: Lender[] = [
             "Own-house proof preferred",
             "Clean statements; DSCR ≥0.8"
         ],
-        eligibilityCriteria: "CIBIL ≥685 (≥750 for high ticket); Vintage ≥3y; ABB to EMI ≥5×; FOIR ≤70 %; DSCR ≥0.8"
+        eligibilityCriteria: "CIBIL ≥685 (≥750 for high ticket); Vintage ≥3y; ABB to EMI ≥5×; FOIR ≤70 %; DSCR ≥0.8",
+        eligibility: {
+            employmentTypes: [ "doctor", "ca" ],
+        }
     },
     {
         id: "5",
@@ -178,7 +190,10 @@ export const mockLenders: Lender[] = [
             "6 months banking; Udyam/Practice registration",
             "26AS; OHP/residence"
         ],
-        eligibilityCriteria: "CIBIL ≥700; ABB to EMI ≥1.5×; Vintage ≥3y ( Doctors ) / ≥5y( CA or ≥3y + receipts ≥₹50L ); FOIR ≤65% "
+        eligibilityCriteria: "CIBIL ≥700; ABB to EMI ≥1.5×; Vintage ≥3y ( Doctors ) / ≥5y( CA or ≥3y + receipts ≥₹50L ); FOIR ≤65% ",
+        eligibility: {
+            employmentTypes: [ "doctor", "ca" ],
+        }
     },
     {
         id: "6",
@@ -207,7 +222,10 @@ export const mockLenders: Lender[] = [
             "6 months banking",
             "Income proof as per program"
         ],
-        eligibilityCriteria: "CIBIL ≥700; FOIR ≤70%; Stable banking vintage ≥6m"
+        eligibilityCriteria: "CIBIL ≥700; FOIR ≤70%; Stable banking vintage ≥6m",
+        eligibility: {
+            employmentTypes: [ "doctor", "ca" ],
+        }
     },
 
     // Lenders for Personal Loans - Salaried
@@ -233,7 +251,10 @@ export const mockLenders: Lender[] = [
             "Form 16 (Last 2 years)", "Company ID Card", "Passport size Photograph",
             "Ownership Proof / Rent Agreement", "Utility Bill"
         ],
-        eligibilityCriteria: "Age 21–60; Work exp ≥2 yrs; CIBIL ≥700; Monthly salary ≥₹25,000"
+        eligibilityCriteria: "Age 21–60; Work exp ≥2 yrs; CIBIL ≥700; Monthly salary ≥₹25,000",
+        eligibility: {
+            employmentTypes: [ "personal loan", "salaried" ],
+        }
     },
     {
         id: "PL-BAJAJ",
@@ -257,7 +278,10 @@ export const mockLenders: Lender[] = [
             "Form 16 (Last 2 years)", "Company ID Card", "Passport size Photograph",
             "Ownership Proof / Rent Agreement", "Utility Bill"
         ],
-        eligibilityCriteria: "Age 24–60; Work exp ≥2 yrs; CIBIL ≥685; Monthly salary ≥₹35,000"
+        eligibilityCriteria: "Age 24–60; Work exp ≥2 yrs; CIBIL ≥685; Monthly salary ≥₹35,000",
+        eligibility: {
+            employmentTypes: [ "personal loan", "salaried" ],
+        }
     },
     {
         id: "PL-IDFC",
@@ -281,7 +305,10 @@ export const mockLenders: Lender[] = [
             "Form 16 (Last 2 years)", "Company ID Card", "Passport size Photograph",
             "Ownership Proof / Rent Agreement", "Utility Bill"
         ],
-        eligibilityCriteria: "Age 23–60; Work exp ≥2 yrs; CIBIL ≥700; Monthly salary ≥₹25,000"
+        eligibilityCriteria: "Age 23–60; Work exp ≥2 yrs; CIBIL ≥700; Monthly salary ≥₹25,000",
+        eligibility: {
+            employmentTypes: [ "personal loan", "salaried" ],
+        }
     },
     {
         id: "PL-ICICI",
@@ -305,7 +332,10 @@ export const mockLenders: Lender[] = [
             "Form 16 (Last 2 years)", "Company ID Card", "Passport size Photograph",
             "Ownership Proof / Rent Agreement", "Utility Bill"
         ],
-        eligibilityCriteria: "Age 23–60; Work exp ≥2 yrs; CIBIL ≥700; Monthly salary ≥₹25,000"
+        eligibilityCriteria: "Age 23–60; Work exp ≥2 yrs; CIBIL ≥700; Monthly salary ≥₹25,000",
+        eligibility: {
+            employmentTypes: [ "personal loan", "salaried" ],
+        }
     },
     {
         id: "PL-CHOLA",
@@ -330,6 +360,9 @@ export const mockLenders: Lender[] = [
             "Ownership Proof / Rent Agreement", "Utility Bill"
         ],
         eligibilityCriteria: "Age 21–60; Work exp ≥2 yrs; CIBIL ≥685; Monthly salary ≥₹35,000",
+        eligibility: {
+            employmentTypes: [ "personal loan", "salaried" ],
+        }
     },
     {
         id: "PL-TATA",
@@ -353,7 +386,10 @@ export const mockLenders: Lender[] = [
             "Form 16 (Last 2 years)", "Company ID Card", "Passport size Photograph",
             "Ownership Proof / Rent Agreement", "Utility Bill"
         ],
-        eligibilityCriteria: "Age 21–60; Work exp ≥2 yrs; CIBIL ≥685; Monthly salary ≥₹35,000"
+        eligibilityCriteria: "Age 21–60; Work exp ≥2 yrs; CIBIL ≥685; Monthly salary ≥₹35,000",
+        eligibility: {
+            employmentTypes: [ "personal loan", "salaried" ],
+        }
     },
     {
         id: "PL-AXIS",
@@ -377,7 +413,10 @@ export const mockLenders: Lender[] = [
             "Form 16 (Last 2 years)", "Company ID Card", "Passport size Photograph",
             "Ownership Proof / Rent Agreement", "Utility Bill"
         ],
-        eligibilityCriteria: "Age 21–60; Work exp ≥2 yrs; CIBIL ≥700; Monthly salary ≥₹25,000"
+        eligibilityCriteria: "Age 21–60; Work exp ≥2 yrs; CIBIL ≥700; Monthly salary ≥₹25,000",
+        eligibility: {
+            employmentTypes: [ "personal loan", "salaried" ],
+        }
     },
 
     // Lenders For Personal Loan - PreApproved
@@ -397,7 +436,10 @@ export const mockLenders: Lender[] = [
         totalCharges: "PF (up to ₹10k) + GST; EMI bounce ₹500–₹1,500; foreclosure 4.75%; part- prepay 2–3 %; penal 24 % p.a.",
         insurance: "Credit life per Godrej plan (added in KFS)",
         docsRequired: [ "PAN & Aadhaar", "3 months salary slips", "6 months bank statement", "Form - 16( last 2 yrs )", "Address proof( rent agreement / ownership )" ],
-        eligibilityCriteria: "Age 21–60 yrs; Work exp ≥2 yrs; CIBIL ≥700; Monthly salary ≥₹25,000"
+        eligibilityCriteria: "Age 21–60 yrs; Work exp ≥2 yrs; CIBIL ≥700; Monthly salary ≥₹25,000",
+        eligibility: {
+            employmentTypes: [ "personal loan", "pre-approved" ],
+        }
     },
     {
         id: "PL2",
@@ -415,7 +457,10 @@ export const mockLenders: Lender[] = [
         totalCharges: "PF up to 2% + GST; EMI bounce ₹500–₹1,500; foreclosure 4.75%; part- prepay 0–3 %; penal 24 % p.a.",
         insurance: "Credit life mandatory (as per ABFL grid)",
         docsRequired: [ "PAN/Aadhaar", "3 months salary slips", "6 months bank statement", "Form - 16( 2 yrs )", "Company ID", "Address proof" ],
-        eligibilityCriteria: "Age 24–60 yrs; Work exp ≥2 yrs; CIBIL ≥685+; Monthly salary ≥₹35,000"
+        eligibilityCriteria: "Age 24–60 yrs; Work exp ≥2 yrs; CIBIL ≥685+; Monthly salary ≥₹35,000",
+        eligibility: {
+            employmentTypes: [ "personal loan", "pre-approved" ],
+        }
     },
     {
         id: "PL3",
@@ -433,7 +478,10 @@ export const mockLenders: Lender[] = [
         totalCharges: "PF up to ₹10k + GST; EMI bounce ₹500–₹1,500; foreclosure 4.75%; part- prepay 2–3 %; penal 24 % p.a.",
         insurance: "Credit life per L&T plan (shown in KFS)",
         docsRequired: [ "PAN/Aadhaar", "3 months salary slips", "6 months bank statement", "Form - 16( 2 yrs )", "Employer ID" ],
-        eligibilityCriteria: "Age 23–60 yrs; Work exp ≥2 yrs; CIBIL ≥700; Monthly salary ≥₹25,000"
+        eligibilityCriteria: "Age 23–60 yrs; Work exp ≥2 yrs; CIBIL ≥700; Monthly salary ≥₹25,000",
+        eligibility: {
+            employmentTypes: [ "personal loan", "pre-approved" ],
+        }
     },
     {
         id: "PL4",
@@ -451,7 +499,10 @@ export const mockLenders: Lender[] = [
         totalCharges: "PF up to ₹10k + GST; EMI bounce ₹500–₹1,500; foreclosure 4.75 %; part - prepay 2–3 %; penal 24 % p.a.",
         insurance: "Credit life optional (per customer consent)",
         docsRequired: [ "PAN/Aadhaar", "3 months salary slips", "6 months bank statement", "Form - 16 / ITR", "Address proof" ],
-        eligibilityCriteria: "Age 23–60 yrs; Work exp ≥2 yrs; CIBIL ≥700; Monthly salary ≥₹25,000"
+        eligibilityCriteria: "Age 23–60 yrs; Work exp ≥2 yrs; CIBIL ≥700; Monthly salary ≥₹25,000",
+        eligibility: {
+            employmentTypes: [ "personal loan", "pre-approved" ],
+        }
     },
     {
         id: "PL5",
@@ -469,7 +520,10 @@ export const mockLenders: Lender[] = [
         totalCharges: "PF up to 3% + GST; EMI bounce ₹500–₹1,500; foreclosure 4.25 %; part- prepay 0–3 %; penal 24 % p.a.",
         insurance: "Credit life as per Bajaj policy (shown in KFS)",
         docsRequired: [ "PAN/Aadhaar", "3 months salary slips", "6 months bank statement", "Form - 16( 2 yrs )", "Rent agreement / ownership proof" ],
-        eligibilityCriteria: "Age 21–60 yrs; Work exp ≥2 yrs; CIBIL ≥685+; Monthly salary ≥₹35,000"
+        eligibilityCriteria: "Age 21–60 yrs; Work exp ≥2 yrs; CIBIL ≥685+; Monthly salary ≥₹35,000",
+        eligibility: {
+            employmentTypes: [ "personal loan", "pre-approved" ],
+        }
     },
     {
         id: "PL6",
@@ -487,7 +541,10 @@ export const mockLenders: Lender[] = [
         totalCharges: "PF up to 2.5% + GST; EMI bounce ₹500–₹1,500; foreclosure 4.25 %; part - prepay 0–3 %; penal 24 % p.a.",
         insurance: "Credit life optional (as per customer consent)",
         docsRequired: [ "PAN/Aadhaar", "3 months salary slips", "6 months bank statement", "Form - 16( 2 yrs )", "Address proof" ],
-        eligibilityCriteria: "Age 21–60 yrs; Work exp ≥2 yrs; CIBIL ≥685+; Monthly salary ≥₹35,000"
+        eligibilityCriteria: "Age 21–60 yrs; Work exp ≥2 yrs; CIBIL ≥685+; Monthly salary ≥₹35,000",
+        eligibility: {
+            employmentTypes: [ "personal loan", "pre-approved" ],
+        }
     },
     {
         id: "PL7",
@@ -505,6 +562,9 @@ export const mockLenders: Lender[] = [
         totalCharges: "PF up to ₹10k + GST; EMI bounce ₹500–₹1,500; foreclosure 4.75%; part- prepay 2–3 %; penal 24 % p.a.",
         insurance: "Credit life optional (bank grid)",
         docsRequired: [ "PAN/Aadhaar", "3 months salary slips", "6 months bank statement", "Form - 16( 2 yrs )", "Address proof" ],
-        eligibilityCriteria: "Age 21–60 yrs; Work exp ≥2 yrs; CIBIL ≥700; Monthly salary ≥₹25,000"
+        eligibilityCriteria: "Age 21–60 yrs; Work exp ≥2 yrs; CIBIL ≥700; Monthly salary ≥₹25,000",
+        eligibility: {
+            employmentTypes: [ "personal loan", "pre-approved" ],
+        }
     }
 ]
