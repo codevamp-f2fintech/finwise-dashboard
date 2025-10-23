@@ -65,7 +65,7 @@ export function OnboardingForm ( { onSubmit }: OnboardingFormProps ) {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#c4d5eb] to-[#e8eff9] p-4 relative overflow-hidden">
-    
+
       <div className="flex items-center justify-center min-h-screen">
         <Card className="w-full max-w-2xl bg-white/90 backdrop-blur-sm border-white/50 shadow-2xl animate-in fade-in slide-in-from-bottom-4 duration-700">
           <CardHeader className="space-y-4 text-center pb-2">
@@ -117,9 +117,12 @@ export function OnboardingForm ( { onSubmit }: OnboardingFormProps ) {
                     </SelectTrigger>
                     <SelectContent className="bg-white border-gray-200">
                       <SelectItem value="salaried" className="focus:bg-[#c4d5eb]">Salaried</SelectItem>
+                      <SelectItem value="personal" className="focus:bg-[#c4d5eb]">Personal</SelectItem>
                       <SelectItem value="self-employed" className="focus:bg-[#c4d5eb]">Self-Employed Professional</SelectItem>
                       <SelectItem value="business" className="focus:bg-[#c4d5eb]">Business Owner</SelectItem>
                       <SelectItem value="freelancer" className="focus:bg-[#c4d5eb]">Freelancer</SelectItem>
+                      <SelectItem value="doctor" className="focus:bg-[#c4d5eb]">Doctor</SelectItem>
+                      <SelectItem value="ca" className="focus:bg-[#c4d5eb]">CA</SelectItem>
                     </SelectContent>
                   </Select>
                   {errors.employmentType && <p className="text-sm text-red-500">{errors.employmentType}</p>}
