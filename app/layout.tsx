@@ -4,6 +4,7 @@ import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
+import AppBar from "@/components/AppBar"
 
 export const metadata: Metadata = {
   title: "Dr. Finwise - AI Financial Advisor",
@@ -18,8 +19,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
-        {children}
+      <body className={`font-sans ${ GeistSans.variable } ${ GeistMono.variable }`}>
+        <AppBar />
+        <main>
+          {children}
+        </main>
         <Analytics />
       </body>
     </html>

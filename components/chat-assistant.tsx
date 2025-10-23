@@ -4,9 +4,9 @@ import { Badge } from "@/components/ui/badge"
 import { useState, useRef, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { InputGroup, InputGroupButton, InputGroupTextarea } from "@/components/ui/input-group"
+import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Send, Bot, User, Sparkles, Upload, Brain } from "lucide-react"
+import { Send, Bot, User, Sparkles, Upload, Brain, MoreVertical, Paperclip, Smile, Mic } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { PDFUpload } from "@/components/pdf-upload"
 import { ragStore } from "@/lib/rag-store"
@@ -39,8 +39,7 @@ export function ChatAssistant ( { stage, customerInfo }: ChatAssistantProps ) {
     {
       id: "1",
       role: "assistant",
-      content:
-        "Hello! I'm Dr. Finwise, your financial advisor. I can help you understand loan eligibility, compare lenders, and answer questions about fees, timelines, and documentation. How can I assist you today?",
+      content: "Hello! I'm Dr. Finwise, your financial advisor. I can help you understand loan eligibility, compare lenders, and answer questions about fees, timelines, and documentation. How can I assist you today?",
       timestamp: new Date(),
     },
   ] )
@@ -50,7 +49,6 @@ export function ChatAssistant ( { stage, customerInfo }: ChatAssistantProps ) {
   const [ ragReady, setRagReady ] = useState( false )
   const scrollRef = useRef<HTMLDivElement>( null )
   const endRef = useRef<HTMLDivElement>( null )
-  const [ expanded, setExpanded ] = useState<Record<string, boolean>>( {} )
 
   useEffect( () => {
     endRef.current?.scrollIntoView( { behavior: "smooth", block: "end" } )
@@ -105,7 +103,6 @@ export function ChatAssistant ( { stage, customerInfo }: ChatAssistantProps ) {
 
         buffer += decoder.decode( value, { stream: true } )
 
-        // Process complete SSE events separated by blank lines
         const events = buffer.split( "\n\n" )
         buffer = events.pop() || ""
 
@@ -115,7 +112,7 @@ export function ChatAssistant ( { stage, customerInfo }: ChatAssistantProps ) {
           for ( const line of lines )
           {
             if ( !line.startsWith( "data:" ) ) continue
-            const payload = line.slice( 5 ).trimStart() // after "data:"
+            const payload = line.slice( 5 ).trimStart()
             if ( !payload ) continue
             if ( payload === "[DONE]" )
             {
@@ -172,182 +169,209 @@ export function ChatAssistant ( { stage, customerInfo }: ChatAssistantProps ) {
     setRagReady( true )
   }
 
-  return (
-    <div className="space-y-3 h-[120vh] flex flex-col">
-      {showPDFUpload && <PDFUpload onUploadComplete={handlePDFUploadComplete} />}
+  const formatTime = ( date: Date ) => {
+    return date.toLocaleTimeString( 'en-US', { hour: 'numeric', minute: '2-digit', hour12: true } )
+  }
 
-      <Card className="bg-white/90 backdrop-blur-sm border-white/50 shadow-xl rounded-xl flex flex-col overflow-hidden h-full">
-        <CardHeader className="border-b border-gray-200/50 pb-3 pt-3 px-4 shrink-0">
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2 min-w-0">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-r from-[#3f50b5] to-[#5c6bc0] shrink-0">
-                <Bot className="h-4 w-4 text-white" />
+  return (
+    <div className="space-y-3 flex flex-col h-screen">
+      {showPDFUpload && (
+        <div className="px-4">
+          <PDFUpload onUploadComplete={handlePDFUploadComplete} />
+        </div>
+      )}
+
+      <Card className="bg-[#f0f2f5] border-0 shadow-xl rounded-lg flex flex-col overflow-hidden h-full max-h-[calc(100vh-100px)]">
+        {/* WhatsApp-like Header */}
+        <CardHeader className="bg-[#008069] text-white p-4 border-b border-[#008069] shrink-0">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="flex h-9 w-10 items-center justify-center rounded-full bg-white/20">
+                <Bot className="h-5 w-5 text-white" />
               </div>
-              <div className="min-w-0">
-                <CardTitle className="text-base bg-gradient-to-r from-[#3f50b5] to-[#5c6bc0] bg-clip-text text-transparent truncate">
-                  Dr. Finwise
-                </CardTitle>
-                <CardDescription className="text-xs text-gray-600 flex items-center gap-1 flex-wrap">
-                  AI Advisor
-                  {ragReady && (
-                    <span className="inline-flex items-center gap-1 text-[10px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded-full">
-                      <Brain className="h-2.5 w-2.5" />
-                      RAG
-                    </span>
-                  )}
+              <div>
+                <CardTitle className="text-white text-lg">Dr. Finwise</CardTitle>
+                <CardDescription className="text-white/80 text-sm">
+                  AI Financial Advisor {ragReady && "• RAG Enabled"}
                 </CardDescription>
               </div>
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowPDFUpload( !showPDFUpload )}
-              className="bg-white/80 border-gray-200 text-gray-700 hover:bg-[#3f50b5] hover:text-white transition-all duration-300 rounded-lg text-xs px-2 py-1 h-auto shrink-0"
-            >
-              <Upload className="h-3 w-3 mr-1" />
-              PDF
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setShowPDFUpload( !showPDFUpload )}
+                className="text-white hover:bg-white/20 rounded-full h-10 w-10"
+              >
+                <Upload className="h-5 w-5" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-white hover:bg-white/20 rounded-full h-10 w-10"
+              >
+                <MoreVertical className="h-5 w-5" />
+              </Button>
+            </div>
           </div>
         </CardHeader>
 
-        <CardContent className="flex flex-1 min-h-[85vh] flex-col gap-3 p-3">
-          {/* Messages */}
-          <ScrollArea className="flex-1 min-h-0 pr-2">
-            <div className="space-y-3">
-              {messages.map( ( message ) => (
-                <div
-                  key={message.id}
-                  className={cn( "flex gap-2", message.role === "user" ? "justify-end" : "justify-start" )}
-                >
-                  {message.role === "assistant" && (
-                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-gradient-to-r from-[#3f50b5]/10 to-[#5c6bc0]/10">
-                      <Bot className="h-3.5 w-3.5 text-[#3f50b5]" />
-                    </div>
-                  )}
+        <CardContent className="flex flex-col flex-1 p-0 bg-[#efeae2] bg-opacity-60 bg-chat-background min-h-0">
+          {/* Messages Area with Fixed Height */}
+          <div className="flex-1 min-h-0 flex flex-col">
+            <ScrollArea className="flex-1 px-4 py-2 min-h-0">
+              <div className="space-y-2">
+                {messages.map( ( message ) => (
                   <div
+                    key={message.id}
                     className={cn(
-                      "max-w-[80%] rounded-xl px-3 py-2 text-xs leading-relaxed shadow-sm",
-                      message.role === "user"
-                        ? "bg-gradient-to-r from-[#3f50b5] to-[#5c6bc0] text-white"
-                        : "bg-gray-50/80 border border-gray-100 text-gray-800",
+                      "flex gap-2 max-w-full",
+                      message.role === "user" ? "justify-end" : "justify-start"
                     )}
                   >
-                    {message.role === "assistant" ? (
-                      <>
-                        <div
-                          className={cn( "relative", expanded[ message.id ] ? "" : "max-h-40 overflow-auto" )}
-                          aria-expanded={!!expanded[ message.id ]}
-                        >
-                          <p className="whitespace-pre-wrap">{message.content}</p>
-                        </div>
-                        {message.content.length > 400 && (
-                          <button
-                            type="button"
-                            className="mt-1.5 text-[10px] text-[#3f50b5] font-medium hover:text-[#354497] transition-colors"
-                            onClick={() => setExpanded( ( prev ) => ( { ...prev, [ message.id ]: !prev[ message.id ] } ) )}
-                            aria-label={expanded[ message.id ] ? "Show less" : "Show more"}
-                          >
-                            {expanded[ message.id ] ? "Show less" : "Show more"}
-                          </button>
-                        )}
-                        <div className="mt-1.5 flex items-center gap-1.5 text-[10px] text-gray-500">
-                          {message.fromKnowledgeBase ? (
-                            <span className="bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded-full">📚 Knowledge</span>
-                          ) : (
-                            <span className="bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded-full">🧠 AI</span>
-                          )}
-                        </div>
-                      </>
-                    ) : (
-                      <p className="whitespace-pre-wrap">{message.content}</p>
-                    )}
-                  </div>
-                  {message.role === "user" && (
-                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-gradient-to-r from-[#3f50b5] to-[#5c6bc0]">
-                      <User className="h-3.5 w-3.5 text-white" />
-                    </div>
-                  )}
-                </div>
-              ) )}
-              {isTyping && (
-                <div className="flex gap-2">
-                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-gradient-to-r from-[#3f50b5]/10 to-[#5c6bc0]/10">
-                    <Bot className="h-3.5 w-3.5 text-[#3f50b5]" />
-                  </div>
-                  <div className="flex items-center gap-2 rounded-xl bg-gray-50/80 border border-gray-100 px-3 py-2">
-                    <div className="flex space-x-1">
-                      <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-[#3f50b5] [animation-delay:-0.3s]" />
-                      <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-[#3f50b5] [animation-delay:-0.15s]" />
-                      <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-[#3f50b5]" />
-                    </div>
-                    <span className="text-xs text-gray-500">Typing...</span>
-                  </div>
-                </div>
-              )}
-              <div ref={endRef} />
-            </div>
-          </ScrollArea>
+                    <div
+                      className={cn(
+                        "max-w-[85%] sm:max-w-[80%] md:max-w-[75%] rounded-lg px-3 py-2 relative",
+                        message.role === "user"
+                          ? "bg-[#d9fdd3] rounded-tr-none"
+                          : "bg-white rounded-tl-none"
+                      )}
+                    >
+                      {/* Message content */}
+                      <p className="text-sm text-gray-800 whitespace-pre-wrap break-words">
+                        {message.content}
+                      </p>
 
-          {/* Knowledge Chips */}
-          <div className="space-y-2 shrink-0">
-            <div className="flex items-center gap-1.5 text-xs text-gray-600 font-medium">
-              <Sparkles className="h-3 w-3 text-[#3f50b5]" />
-              <span>Quick Topics</span>
-            </div>
-            <div className="flex flex-wrap gap-1.5">
-              {knowledgeChips.map( ( chip ) => (
-                <Badge
-                  key={chip}
-                  variant="outline"
-                  className="cursor-pointer transition-all duration-300 bg-white/80 border-gray-200 text-gray-700 hover:bg-gradient-to-r hover:from-[#3f50b5] hover:to-[#5c6bc0] hover:text-white hover:border-transparent hover:shadow-md rounded-md px-2 py-0.5 text-[10px]"
-                  onClick={() => handleChipClick( chip )}
-                >
-                  {chip}
-                </Badge>
-              ) )}
-            </div>
+                      {/* Timestamp */}
+                      <div className="flex justify-end items-center gap-1 mt-1">
+                        {message.fromKnowledgeBase && (
+                          <span className="text-[10px] text-blue-600 bg-blue-100 px-1 rounded">KB</span>
+                        )}
+                        <span className="text-[11px] text-gray-500">
+                          {formatTime( message.timestamp )}
+                        </span>
+                      </div>
+
+                      {/* Tail for message bubble */}
+                      <div
+                        className={cn(
+                          "absolute top-0 w-3 h-3",
+                          message.role === "user"
+                            ? "right-0 -mr-3 bg-[#d9fdd3] clip-path-[polygon(100% 0, 0 0, 100% 100%)]"
+                            : "left-0 -ml-3 bg-white clip-path-[polygon(0 0, 100% 0, 0 100%)]"
+                        )}
+                      />
+                    </div>
+                  </div>
+                ) )}
+
+                {isTyping && (
+                  <div className="flex gap-2 justify-start">
+                    <div className="bg-white rounded-tl-none rounded-lg px-3 py-2 max-w-[70%]">
+                      <div className="flex items-center gap-2">
+                        <div className="flex space-x-1">
+                          <div className="h-2 w-2 animate-bounce rounded-full bg-gray-400 [animation-delay:-0.3s]" />
+                          <div className="h-2 w-2 animate-bounce rounded-full bg-gray-400 [animation-delay:-0.15s]" />
+                          <div className="h-2 w-2 animate-bounce rounded-full bg-gray-400" />
+                        </div>
+                        <span className="text-xs text-gray-500">Typing...</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                <div ref={endRef} />
+              </div>
+            </ScrollArea>
           </div>
 
-          {/* Input Composer */}
-          <form
-            onSubmit={( e ) => {
-              e.preventDefault()
-              handleSend()
-            }}
-            className="border-t border-gray-200/50 pt-2 shrink-0"
-            aria-label="Chat message composer"
-          >
-            <InputGroup className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 p-2">
-              <InputGroupTextarea
-                rows={2}
-                value={input}
-                onChange={( e ) => setInput( e.target.value )}
-                onKeyDown={( e ) => {
-                  if ( e.key === "Enter" && !e.shiftKey )
-                  {
-                    e.preventDefault()
-                    handleSend()
-                  }
-                }}
-                placeholder="Ask about loans..."
-                aria-label="Message"
-                className="text-xs border-0 focus:ring-0 bg-white text-gray-800 placeholder:text-gray-400 resize-none w-full px-2 py-1 rounded focus:outline-none"
-              />
-              <InputGroupButton
-                type="submit"
-                variant="default"
-                size="icon-sm"
-                className="ml-2 bg-gradient-to-r from-[#3f50b5] to-[#5c6bc0] hover:from-[#354497] hover:to-[#4a58a5] text-white shadow-lg hover:shadow-xl transition-all duration-300 rounded-md h-8 w-8"
-                disabled={!input.trim() || isTyping}
-                aria-label="Send message"
-                title="Send"
+          {/* Quick Topics Chips */}
+          <div className="border-t border-gray-300 bg-white p-3">
+            <div className="flex items-center gap-2 mb-2">
+              <Sparkles className="h-4 w-4 text-[#008069] shrink-0" />
+              <span className="text-sm text-gray-600 font-medium">Quick Topics</span>
+            </div>
+            <ScrollArea className="w-full">
+              <div className="flex gap-2 pb-2 min-w-max">
+                {knowledgeChips.map( ( chip ) => (
+                  <button
+                    key={chip}
+                    onClick={() => handleChipClick( chip )}
+                    className="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs px-3 py-1.5 rounded-full transition-colors duration-200 border border-gray-300 whitespace-nowrap shrink-0"
+                  >
+                    {chip}
+                  </button>
+                ) )}
+              </div>
+            </ScrollArea>
+          </div>
+
+          {/* Input Area - WhatsApp Style */}
+          <div className="bg-gray-100 p-3 border-t border-gray-300 shrink-0">
+            <div className="flex items-center gap-2">
+              {/* Attachment Button */}
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-gray-600 hover:bg-gray-300 rounded-full h-10 w-10 shrink-0"
               >
-                <Send className="h-3.5 w-3.5" />
-              </InputGroupButton>
-            </InputGroup>
-          </form>
+                <Paperclip className="h-5 w-5" />
+              </Button>
+
+              {/* Emoji Button */}
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-gray-600 hover:bg-gray-300 rounded-full h-10 w-10 shrink-0"
+              >
+                <Smile className="h-5 w-5" />
+              </Button>
+
+              {/* Input Field */}
+              <div className="flex-1 min-w-0">
+                <Input
+                  value={input}
+                  onChange={( e ) => setInput( e.target.value )}
+                  onKeyDown={( e ) => {
+                    if ( e.key === "Enter" && !e.shiftKey )
+                    {
+                      e.preventDefault();
+                      handleSend();
+                    }
+                  }}
+                  placeholder="Type a message"
+                  className="bg-white border-0 rounded-full px-4 py-3 text-sm focus:ring-1 focus:ring-[#008069] focus:border-[#008069] w-full"
+                />
+              </div>
+
+              {/* Send/Voice Record Button */}
+              {input.trim() ? (
+                <Button
+                  onClick={handleSend}
+                  disabled={!input.trim() || isTyping}
+                  className="bg-[#008069] hover:bg-[#006e58] text-white rounded-full h-10 w-10 transition-colors duration-200 shrink-0"
+                  size="icon"
+                >
+                  <Send className="h-5 w-5" />
+                </Button>
+              ) : (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-gray-600 hover:bg-gray-300 rounded-full h-10 w-10 shrink-0"
+                >
+                  <Mic className="h-5 w-5" />
+                </Button>
+              )}
+            </div>
+          </div>
         </CardContent>
       </Card>
+
+      <style jsx>{`
+    .bg-chat-background {
+      background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%2390c8c8' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+    }
+  `}</style>
     </div>
   )
 }
