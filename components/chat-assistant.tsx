@@ -181,7 +181,7 @@ export function ChatAssistant ( { stage, customerInfo }: ChatAssistantProps ) {
         </div>
       )}
 
-      <Card className="bg-[#f0f2f5] border-0 shadow-xl rounded-lg flex flex-col overflow-hidden h-full max-h-[calc(100vh-100px)]">
+      <Card className="bg-[#f0f2f5] border-0 shadow-xl rounded-lg flex flex-col overflow-hidden h-full py-0 max-h-[calc(100vh-100px)]">
         {/* WhatsApp-like Header */}
         <CardHeader className="bg-[#008069] text-white p-4 border-b border-[#008069] shrink-0">
           <div className="flex items-center justify-between">
@@ -217,37 +217,37 @@ export function ChatAssistant ( { stage, customerInfo }: ChatAssistantProps ) {
         </CardHeader>
 
         <CardContent className="flex flex-col flex-1 p-0 bg-[#efeae2] bg-opacity-60 bg-chat-background min-h-0">
-          {/* Messages Area with Fixed Height */}
+          {/* Messages Area - Much larger space */}
           <div className="flex-1 min-h-0 flex flex-col">
-            <ScrollArea className="flex-1 px-4 py-2 min-h-0">
-              <div className="space-y-2">
+            <ScrollArea className="flex-1 px-4 py-4 min-h-0">
+              <div className="space-y-4">
                 {messages.map( ( message ) => (
                   <div
                     key={message.id}
                     className={cn(
-                      "flex gap-2 max-w-full",
+                      "flex gap-3 max-w-full",
                       message.role === "user" ? "justify-end" : "justify-start"
                     )}
                   >
                     <div
                       className={cn(
-                        "max-w-[85%] sm:max-w-[80%] md:max-w-[75%] rounded-lg px-3 py-2 relative",
+                        "max-w-[90%] lg:max-w-[80%] xl:max-w-[75%] rounded-2xl px-4 py-3 relative",
                         message.role === "user"
-                          ? "bg-[#d9fdd3] rounded-tr-none"
-                          : "bg-white rounded-tl-none"
+                          ? "bg-[#d9fdd3] rounded-br-none"
+                          : "bg-white rounded-bl-none"
                       )}
                     >
-                      {/* Message content */}
-                      <p className="text-sm text-gray-800 whitespace-pre-wrap break-words">
+                      {/* Message content with larger text */}
+                      <p className="text-base leading-relaxed text-gray-800 whitespace-pre-wrap break-words">
                         {message.content}
                       </p>
 
                       {/* Timestamp */}
-                      <div className="flex justify-end items-center gap-1 mt-1">
+                      <div className="flex justify-end items-center gap-1 mt-2">
                         {message.fromKnowledgeBase && (
-                          <span className="text-[10px] text-blue-600 bg-blue-100 px-1 rounded">KB</span>
+                          <span className="text-[10px] text-blue-600 bg-blue-100 px-1.5 py-0.5 rounded">KB</span>
                         )}
-                        <span className="text-[11px] text-gray-500">
+                        <span className="text-xs text-gray-500">
                           {formatTime( message.timestamp )}
                         </span>
                       </div>
@@ -255,7 +255,7 @@ export function ChatAssistant ( { stage, customerInfo }: ChatAssistantProps ) {
                       {/* Tail for message bubble */}
                       <div
                         className={cn(
-                          "absolute top-0 w-3 h-3",
+                          "absolute bottom-0 w-3 h-4",
                           message.role === "user"
                             ? "right-0 -mr-3 bg-[#d9fdd3] clip-path-[polygon(100% 0, 0 0, 100% 100%)]"
                             : "left-0 -ml-3 bg-white clip-path-[polygon(0 0, 100% 0, 0 100%)]"
@@ -266,15 +266,15 @@ export function ChatAssistant ( { stage, customerInfo }: ChatAssistantProps ) {
                 ) )}
 
                 {isTyping && (
-                  <div className="flex gap-2 justify-start">
-                    <div className="bg-white rounded-tl-none rounded-lg px-3 py-2 max-w-[70%]">
+                  <div className="flex gap-3 justify-start">
+                    <div className="bg-white rounded-bl-none rounded-2xl px-4 py-3 max-w-[80%]">
                       <div className="flex items-center gap-2">
                         <div className="flex space-x-1">
                           <div className="h-2 w-2 animate-bounce rounded-full bg-gray-400 [animation-delay:-0.3s]" />
                           <div className="h-2 w-2 animate-bounce rounded-full bg-gray-400 [animation-delay:-0.15s]" />
                           <div className="h-2 w-2 animate-bounce rounded-full bg-gray-400" />
                         </div>
-                        <span className="text-xs text-gray-500">Typing...</span>
+                        <span className="text-sm text-gray-500">Typing...</span>
                       </div>
                     </div>
                   </div>
@@ -284,28 +284,26 @@ export function ChatAssistant ( { stage, customerInfo }: ChatAssistantProps ) {
             </ScrollArea>
           </div>
 
-          {/* Quick Topics Chips */}
-          <div className="border-t border-gray-300 bg-white p-3 min-h-[20vh]">
+          {/* Quick Topics Chips - Reduced height */}
+          <div className="border-t border-gray-300 bg-white p-3 min-h-[100px]">
             <div className="flex items-center gap-2 mb-2">
               <Sparkles className="h-4 w-4 text-[#008069]" />
               <span className="text-sm text-gray-600 font-medium">Quick Topics</span>
             </div>
-            <ScrollArea className="w-full">
-              <div className="flex gap-2 pb-2 min-w-max">
-                {knowledgeChips.map( ( chip ) => (
-                  <button
-                    key={chip}
-                    onClick={() => handleChipClick( chip )}
-                    className="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs px-3 py-1.5 rounded-full transition-colors duration-200 border border-gray-300 whitespace-nowrap shrink-0"
-                  >
-                    {chip}
-                  </button>
-                ) )}
-              </div>
-            </ScrollArea>
+            <div className="grid grid-cols-3 gap-2">
+              {knowledgeChips.map( ( chip ) => (
+                <button
+                  key={chip}
+                  onClick={() => handleChipClick( chip )}
+                  className="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs px-2 py-2 rounded-full transition-colors duration-200 border border-gray-300 break-words min-h-[2rem] flex items-center justify-center text-center leading-tight"
+                >
+                  <span className="break-words whitespace-normal">{chip}</span>
+                </button>
+              ) )}
+            </div>
           </div>
 
-          {/* Input Area - WhatsApp Style */}
+          {/* Input Area - Compact */}
           <div className="bg-gray-100 p-3 border-t border-gray-300 shrink-0">
             <div className="flex items-center gap-2">
               {/* Attachment Button */}
