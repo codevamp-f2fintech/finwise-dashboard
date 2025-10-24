@@ -116,13 +116,12 @@ export function OnboardingForm ( { onSubmit }: OnboardingFormProps ) {
                       <SelectValue placeholder="Select employment type" />
                     </SelectTrigger>
                     <SelectContent className="bg-white border-gray-200">
-                      <SelectItem value="salaried" className="focus:bg-[#c4d5eb]">Salaried</SelectItem>
-                      <SelectItem value="personal" className="focus:bg-[#c4d5eb]">Personal</SelectItem>
-                      <SelectItem value="self-employed" className="focus:bg-[#c4d5eb]">Self-Employed Professional</SelectItem>
-                      <SelectItem value="business" className="focus:bg-[#c4d5eb]">Business Owner</SelectItem>
-                      <SelectItem value="freelancer" className="focus:bg-[#c4d5eb]">Freelancer</SelectItem>
-                      <SelectItem value="doctor" className="focus:bg-[#c4d5eb]">Doctor</SelectItem>
-                      <SelectItem value="ca" className="focus:bg-[#c4d5eb]">CA</SelectItem>
+                      <SelectItem value="home loan" className="focus:bg-[#c4d5eb]">Home Loan</SelectItem>
+                      <SelectItem value="personal loan" className="focus:bg-[#c4d5eb]">Personal Loan</SelectItem>
+                      <SelectItem value="business loan" className="focus:bg-[#c4d5eb]">Business Loan</SelectItem>
+                      <SelectItem value="machinery loan" className="focus:bg-[#c4d5eb]">Machinery Loan</SelectItem>
+                      <SelectItem value="doctor" className="focus:bg-[#c4d5eb]">Doctor Loan</SelectItem>
+                      <SelectItem value="ca" className="focus:bg-[#c4d5eb]">CA Loan</SelectItem>
                     </SelectContent>
                   </Select>
                   {errors.employmentType && <p className="text-sm text-red-500">{errors.employmentType}</p>}

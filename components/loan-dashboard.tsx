@@ -236,8 +236,18 @@ export function LoanDashboard ( { customerInfo, lenders }: LoanDashboardProps ) 
                           <p className="text-sm text-gray-600 font-medium">
                             {stage === "A" ? "Indicative Limit" : "Final Limit"}
                           </p>
-                          <p className="text-2xl font-bold text-[#3f50b5]">
-                            {stage === "B" && lender.finalLimit ? lender.finalLimit : lender.indicativeLimit}
+
+                          <p className="text-2xl font-bold text-[#3f50b5] leading-snug">
+                            {stage === "B" && lender.finalLimit
+                              ? lender.finalLimit
+                              : lender.indicativeLimit
+                                ?.split( ";" )
+                                .map( ( line: string, index: number ) => (
+                                  <span key={index}>
+                                    {line.trim()}
+                                    <br />
+                                  </span>
+                                ) )}
                           </p>
                         </div>
                         <div className="space-y-2 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 border border-green-100">
@@ -301,25 +311,23 @@ export function LoanDashboard ( { customerInfo, lenders }: LoanDashboardProps ) 
                       </div>
 
                       {/* CTA */}
-                      <div className="flex">
                         <Button
                           onClick={() => handleApply( lender )}
                           disabled={lender.status === "ineligible"}
-                          className="w-[26vw] gap-2 bg-gradient-to-r from-[#3f50b5] to-[#5c6bc0] hover:from-[#354497] hover:to-[#4a58a5] text-white shadow-lg hover:shadow-xl transition-all duration-300 rounded-xl py-6 text-base font-semibold"
+                          className="w-full gap-2 bg-gradient-to-r from-[#3f50b5] to-[#5c6bc0] hover:from-[#354497] hover:to-[#4a58a5] text-white shadow-lg hover:shadow-xl transition-all duration-300 rounded-xl py-6 text-base font-semibold"
                           size="lg"
                         >
                           {stage === "A" ? "Apply" : "Proceed with Application"}
                           <ArrowRight className="h-5 w-5" />
                         </Button>
-                        <Button
+                        {/* <Button
                           disabled={lender.status === "ineligible"}
                           className="w-[26vw] gap-2 bg-gradient-to-r from-[#3fb56c] to-[#5cc0b3] hover:from-[#354497] hover:to-[#4a58a5] text-white shadow-lg hover:shadow-xl transition-all duration-300 rounded-xl py-6 text-base font-semibold"
                           size="lg"
                         >
                           {stage === "A" ? "Call" : "Proceed with Application"}
                           <ArrowRight className="h-5 w-5" />
-                        </Button>
-                      </div>
+                        </Button> */}
                     </CardContent>
                   </Card>
                 ) )}
@@ -328,7 +336,8 @@ export function LoanDashboard ( { customerInfo, lenders }: LoanDashboardProps ) 
           </div>
 
           {/* Chat Assistant */}
-          <div className="lg:max-h-[100vh] lg:flex lg:flex-col lg:min-h-0 sticky top-[2px] self-start">
+          <div className="lg:max-h-[100vh] lg:flex lg:flex-col lg:min-h-0 sticky top-[6px] self-start">
+            <br /> <br />
             <ChatAssistant stage={stage} customerInfo={customerInfo} />
           </div>
         </div>
