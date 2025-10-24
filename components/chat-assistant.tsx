@@ -6,7 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Send, Bot, User, Sparkles, Upload, Brain, MoreVertical, Paperclip, Smile, Mic } from "lucide-react"
+import { Send, Bot, User, Sparkles, Upload, Brain, MoreVertical, Paperclip, Smile, Mic, ChevronUp, ChevronDown } from "lucide-react"
+import ReactMarkdown from "react-markdown"
 import { cn } from "@/lib/utils"
 import { PDFUpload } from "@/components/pdf-upload"
 import { ragStore } from "@/lib/rag-store"
@@ -47,6 +48,8 @@ export function ChatAssistant ( { stage, customerInfo }: ChatAssistantProps ) {
   const [ isTyping, setIsTyping ] = useState( false )
   const [ showPDFUpload, setShowPDFUpload ] = useState( false )
   const [ ragReady, setRagReady ] = useState( false )
+  const [ showQuickTopics, setShowQuickTopics ] = useState( true )
+  const [ firstInteractionDone, setFirstInteractionDone ] = useState( false )
   const scrollRef = useRef<HTMLDivElement>( null )
   const endRef = useRef<HTMLDivElement>( null )
 
@@ -61,7 +64,11 @@ export function ChatAssistant ( { stage, customerInfo }: ChatAssistantProps ) {
   const handleSend = async () => {
     if ( isTyping ) return
     if ( !input.trim() ) return
-
+    if ( !firstInteractionDone )
+    {
+      setFirstInteractionDone( true )
+      setShowQuickTopics( false )
+    }
     const userMessage: Message = {
       id: Date.now().toString(),
       role: "user",
@@ -238,9 +245,11 @@ export function ChatAssistant ( { stage, customerInfo }: ChatAssistantProps ) {
                       )}
                     >
                       {/* Message content with larger text */}
-                      <p className="text-base leading-relaxed text-gray-800 whitespace-pre-wrap break-words">
-                        {message.content}
-                      </p>
+                      <div className="text-base leading-relaxed text-gray-800 whitespace-pre-wrap break-words">
+                        <ReactMarkdown>
+                          {message.content}
+                        </ReactMarkdown>
+                      </div>
 
                       {/* Timestamp */}
                       <div className="flex justify-end items-center gap-1 mt-2">
@@ -274,7 +283,7 @@ export function ChatAssistant ( { stage, customerInfo }: ChatAssistantProps ) {
                           <div className="h-2 w-2 animate-bounce rounded-full bg-gray-400 [animation-delay:-0.15s]" />
                           <div className="h-2 w-2 animate-bounce rounded-full bg-gray-400" />
                         </div>
-                        <span className="text-sm text-gray-500">Typing...</span>
+                        <span className="text-sm text-gray-500">Thinking</span>
                       </div>
                     </div>
                   </div>
@@ -284,24 +293,45 @@ export function ChatAssistant ( { stage, customerInfo }: ChatAssistantProps ) {
             </ScrollArea>
           </div>
 
-          {/* Quick Topics Chips - Reduced height */}
-          <div className="border-t border-gray-300 bg-white p-3 min-h-[100px]">
-            <div className="flex items-center gap-2 mb-2">
-              <Sparkles className="h-4 w-4 text-[#008069]" />
-              <span className="text-sm text-gray-600 font-medium">Quick Topics</span>
-            </div>
-            <div className="grid grid-cols-3 gap-2">
-              {knowledgeChips.map( ( chip ) => (
+          {/* Quick Topics Toggle Section */}
+          {( showQuickTopics || !firstInteractionDone ) && (
+            <div className="border-t border-gray-300 bg-white p-3 transition-all duration-300 ease-in-out">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <Sparkles className="h-4 w-4 text-[#008069]" />
+                  <span className="text-sm text-gray-600 font-medium">Quick Topics</span>
+                </div>
+
+                {/* Toggle button */}
                 <button
-                  key={chip}
-                  onClick={() => handleChipClick( chip )}
-                  className="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs px-2 py-2 rounded-full transition-colors duration-200 border border-gray-300 break-words min-h-[2rem] flex items-center justify-center text-center leading-tight"
+                  onClick={() => setShowQuickTopics( !showQuickTopics )}
+                  className="p-1 rounded-full hover:bg-gray-200 transition"
+                  aria-label="Toggle Quick Topics"
                 >
-                  <span className="break-words whitespace-normal">{chip}</span>
+                  {showQuickTopics ? (
+                    <ChevronUp className="h-4 w-4 text-gray-600" />
+                  ) : (
+                    <ChevronDown className="h-4 w-4 text-gray-600" />
+                  )}
                 </button>
-              ) )}
+              </div>
+
+              {showQuickTopics && (
+                <div className="grid grid-cols-3 gap-2">
+                  {knowledgeChips.map( ( chip ) => (
+                    <button
+                      key={chip}
+                      onClick={() => handleChipClick( chip )}
+                      className="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs px-2 py-2 rounded-full transition-colors duration-200 border border-gray-300 break-words min-h-[2rem] flex items-center justify-center text-center leading-tight"
+                    >
+                      <span className="break-words whitespace-normal">{chip}</span>
+                    </button>
+                  ) )}
+                </div>
+              )}
             </div>
-          </div>
+          )}
+
 
           {/* Input Area - Compact */}
           <div className="bg-gray-100 p-3 border-t border-gray-300 shrink-0">
