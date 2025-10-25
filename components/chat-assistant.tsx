@@ -336,23 +336,6 @@ export function ChatAssistant ( { stage, customerInfo }: ChatAssistantProps ) {
           {/* Input Area - Compact */}
           <div className="bg-gray-100 p-3 border-t border-gray-300 shrink-0">
             <div className="flex items-center gap-2">
-              {/* Attachment Button */}
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-gray-600 hover:bg-gray-300 rounded-full h-10 w-10 shrink-0"
-              >
-                <Paperclip className="h-5 w-5" />
-              </Button>
-
-              {/* Emoji Button */}
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-gray-600 hover:bg-gray-300 rounded-full h-10 w-10 shrink-0"
-              >
-                <Smile className="h-5 w-5" />
-              </Button>
 
               {/* Input Field */}
               <div className="flex-1 min-w-0">
@@ -372,7 +355,6 @@ export function ChatAssistant ( { stage, customerInfo }: ChatAssistantProps ) {
               </div>
 
               {/* Send/Voice Record Button */}
-              {input.trim() ? (
                 <Button
                   onClick={handleSend}
                   disabled={!input.trim() || isTyping}
@@ -381,15 +363,7 @@ export function ChatAssistant ( { stage, customerInfo }: ChatAssistantProps ) {
                 >
                   <Send className="h-5 w-5" />
                 </Button>
-              ) : (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-gray-600 hover:bg-gray-300 rounded-full h-10 w-10 shrink-0"
-                >
-                  <Mic className="h-5 w-5" />
-                </Button>
-              )}
+            
             </div>
           </div>
         </CardContent>

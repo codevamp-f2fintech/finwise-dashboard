@@ -111,8 +111,10 @@ export function OnboardingForm ( { onSubmit }: OnboardingFormProps ) {
                   <Select value={formData.employmentType} onValueChange={( value ) => updateField( "employmentType", value )}>
                     <SelectTrigger
                       id="employmentType"
-                      className={`bg-white/70 border-gray-200 focus:border-[#3f50b5] focus:ring-[#3f50b5] transition-all duration-200 ${ errors.employmentType ? "border-red-300 focus:border-red-500 focus:ring-red-500" : "" }`}
+                      className={`h-12 w-full bg-white/70 border-gray-200 rounded-md focus:border-[#3f50b5] focus:ring-[#3f50b5] transition-all duration-200 ${ errors.employmentType ? "border-red-300 focus:border-red-500 focus:ring-red-500" : ""
+                        }`}
                     >
+
                       <SelectValue placeholder="Select employment type" />
                     </SelectTrigger>
                     <SelectContent className="bg-white border-gray-200">

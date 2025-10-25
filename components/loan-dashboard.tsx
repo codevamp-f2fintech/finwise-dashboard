@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -66,6 +66,10 @@ export function LoanDashboard ( { customerInfo, lenders }: LoanDashboardProps ) 
         return <XCircle className="h-5 w-5 text-red-500" />
     }
   }
+
+  useEffect( () => {
+    window.scrollTo( { top: 0, behavior: "instant" } )
+  }, [] )
 
   const getStatusBadge = ( status: Lender[ "status" ] ) => {
     const variants = {
