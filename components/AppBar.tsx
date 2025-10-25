@@ -303,7 +303,7 @@ export default function AppBar () {
                     </Drawer>
 
                     {/* Mobile Menu Icon */}
-                    <IconButton
+                    {/* <IconButton
                         edge="start"
                         onClick={toggleDrawer( true )}
                         sx={{
@@ -320,6 +320,7 @@ export default function AppBar () {
                             marginLeft: {
                                 sm: "80px",
                             },
+                            border: "2px solid"
                         }}
                     >
                         <MenuIcon
@@ -330,7 +331,7 @@ export default function AppBar () {
                                 },
                             }}
                         />
-                    </IconButton>
+                    </IconButton> */}
 
                     {/* Desktop Menu */}
                     <Box
