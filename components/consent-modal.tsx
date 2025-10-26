@@ -56,7 +56,7 @@ export function ConsentModal ( { open, onOpenChange, onAccept, lenderName }: Con
           </div>
         </DialogHeader>
 
-        <div className="flex-1 min-h-0 overflow-y-auto space-y-4 py-4 px-1 border">
+        <div className="flex-1 min-h-0 overflow-y-auto space-y-4 py-4 px-1">
           {/* Info Alert */}
           <div className="flex gap-3 rounded-lg bg-primary/10 p-3 sm:p-4">
             <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5 shrink-0 text-primary mt-0.5" />
