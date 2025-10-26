@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ChatAssistant } from "@/components/chat-assistant"
 import { ConsentModal } from "@/components/consent-modal"
-import { CheckCircle2, AlertCircle, XCircle, TrendingUp, Clock, FileText, ArrowRight, Star, Zap, Shield } from "lucide-react"
+import { CheckCircle2, AlertCircle, XCircle, TrendingUp, Clock, FileText, ArrowRight, Star, Zap, Shield, Phone } from "lucide-react"
 import type { CustomerInfo } from "@/components/onboarding-form"
 import type { Lender } from "./mock-lenders"
 
@@ -22,6 +22,7 @@ export function LoanDashboard ( { customerInfo, lenders }: LoanDashboardProps ) 
   const [ stage, setStage ] = useState<Stage>( "A" )
   const [ showConsentModal, setShowConsentModal ] = useState( false )
   const [ selectedLender, setSelectedLender ] = useState<Lender | null>( null )
+  const [ isMobile, setIsMobile ] = useState( false )
 
   // Sort lenders: eligible first, then partial eligible
   const sortedLenders = useMemo( () => {
@@ -49,10 +50,30 @@ export function LoanDashboard ( { customerInfo, lenders }: LoanDashboardProps ) 
     }
   }
 
+  // Check if device is mobile
+  useEffect( () => {
+    const checkDevice = () => {
+      setIsMobile( window.innerWidth < 768 ) // 768px is typical breakpoint for mobile
+    }
+
+    // Check initially
+    checkDevice()
+
+    // Add event listener for window resize
+    window.addEventListener( "resize", checkDevice )
+
+    // Cleanup
+    return () => window.removeEventListener( "resize", checkDevice )
+  }, [] )
+
   const handleConsentAccept = () => {
     setShowConsentModal( false )
     setStage( "B" )
     console.log( "[v0] User consented, moving to Stage B" )
+  }
+
+  const handleCall = () => {
+    window.location.href = "tel:+14388010973"
   }
 
   const getStatusIcon = ( status: Lender[ "status" ] ) => {
@@ -315,23 +336,29 @@ export function LoanDashboard ( { customerInfo, lenders }: LoanDashboardProps ) 
                       </div>
 
                       {/* CTA */}
+                      <div className={`flex gap-3 ${ isMobile ? "flex-row" : "flex-col" }`}>
                         <Button
                           onClick={() => handleApply( lender )}
                           disabled={lender.status === "ineligible"}
-                          className="w-full gap-2 bg-gradient-to-r from-[#3f50b5] to-[#5c6bc0] hover:from-[#354497] hover:to-[#4a58a5] text-white shadow-lg hover:shadow-xl transition-all duration-300 rounded-xl py-6 text-base font-semibold"
+                          className={`gap-2 bg-gradient-to-r from-[#3f50b5] to-[#5c6bc0] hover:from-[#354497] hover:to-[#4a58a5] text-white shadow-lg hover:shadow-xl transition-all duration-300 rounded-xl py-6 text-base font-semibold ${ isMobile ? "w-[50%]" : "w-full"
+                            }`}
                           size="lg"
                         >
                           {stage === "A" ? "Apply" : "Proceed with Application"}
                           <ArrowRight className="h-5 w-5" />
                         </Button>
-                        {/* <Button
-                          disabled={lender.status === "ineligible"}
-                          className="w-[26vw] gap-2 bg-gradient-to-r from-[#3fb56c] to-[#5cc0b3] hover:from-[#354497] hover:to-[#4a58a5] text-white shadow-lg hover:shadow-xl transition-all duration-300 rounded-xl py-6 text-base font-semibold"
-                          size="lg"
-                        >
-                          {stage === "A" ? "Call" : "Proceed with Application"}
-                          <ArrowRight className="h-5 w-5" />
-                        </Button> */}
+
+                        {isMobile && (
+                          <Button
+                            onClick={handleCall}
+                            className="w-[50%] gap-2 bg-gradient-to-r from-[#3fb56c] to-[#5cc0b3] hover:from-[#359a5c] hover:to-[#4ca895] text-white shadow-lg hover:shadow-xl transition-all duration-300 rounded-xl py-6 text-base font-semibold"
+                            size="lg"
+                          >
+                            Call
+                            <Phone className="h-5 w-5" />
+                          </Button>
+                        )}
+                      </div>
                     </CardContent>
                   </Card>
                 ) )}
