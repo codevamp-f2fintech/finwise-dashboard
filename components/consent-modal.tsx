@@ -43,7 +43,7 @@ export function ConsentModal ( { open, onOpenChange, onAccept, lenderName }: Con
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[95vw] w-full mx-4 sm:mx-auto sm:max-w-[500px] md:max-w-[550px] lg:max-w-[600px] max-h-[85vh] overflow-hidden flex flex-col">
+      <DialogContent className="max-w-[95vw] w-full sm:mx-auto sm:max-w-[500px] md:max-w-[550px] lg:max-w-[600px] max-h-[85vh] overflow-hidden flex flex-col">
         <DialogHeader className="shrink-0">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-primary/10">
@@ -56,7 +56,7 @@ export function ConsentModal ( { open, onOpenChange, onAccept, lenderName }: Con
           </div>
         </DialogHeader>
 
-        <div className="flex-1 min-h-0 overflow-y-auto space-y-4 py-4 px-1">
+        <div className="flex-1 min-h-0 overflow-y-auto space-y-4 py-4 px-1 border">
           {/* Info Alert */}
           <div className="flex gap-3 rounded-lg bg-primary/10 p-3 sm:p-4">
             <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5 shrink-0 text-primary mt-0.5" />
