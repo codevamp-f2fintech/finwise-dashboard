@@ -370,7 +370,7 @@ export const mockLenders: Lender[] = [
         productType: "Personal Loan – Salaried (OD facility)",
         indicativeLimit: "₹1L – ₹40L",
         finalLimit: "₹40L",
-        roiRange: "12% – 14%",
+        roiRange: "12% – 15%",
         processingFee: "Up to 2.5% + GST",
         tenure: "12–60 months",
         emiPerLakhMin: "₹1,916",
