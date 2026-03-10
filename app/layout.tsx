@@ -5,7 +5,7 @@ import { GeistMono } from "geist/font/mono"
 import { Analytics } from "@vercel/analytics/next"
 
 import "./globals.css"
-import AppBar from "@/components/AppBar"
+import AppBar from "@/components/lenders/AppBar"
 import { Toaster } from "@/components/ui/sonner"
 
 export const metadata: Metadata = {

@@ -1,109 +1,58 @@
 "use client"
 
-import { useState } from "react"
-import { OnboardingForm, type CustomerInfo } from "@/components/onboarding-form"
-import { LoadingTransition } from "@/components/loading-transition"
-import { LoanDashboard } from "@/components/loan-dashboard"
-import { mockLenders, type Lender } from "@/components/mock-lenders"
+import { useRouter } from "next/navigation"
+import { OnboardingForm, type CustomerInfo } from "@/components/lenders/onboarding-form"
 
-type AppState = "onboarding" | "loading" | "dashboard"
+export default function Home() {
+  const router = useRouter()
 
-// Filtering function
-function filterLenders ( lenders: Lender[], customerInfo: CustomerInfo ): Lender[] {
-  const { employmentType, income, loanAmount } = customerInfo
-
-  // Convert string values to numbers
-  const monthlyIncome = parseFloat( income )
-  const requestedLoanAmount = parseFloat( loanAmount )
-
-  // For business owners, convert annual turnover to equivalent monthly income for filtering
-  const effectiveMonthlyIncome = employmentType === "business"
-    ? monthlyIncome / 12  // Convert annual turnover to monthly equivalent
-    : monthlyIncome
-
-  return lenders.filter( lender => {
-    // Check employment type eligibility
-    if ( !lender.eligibility.employmentTypes.includes( employmentType ) )
-    {
-      return false
-    }
-
-    // Check income eligibility
-    if ( effectiveMonthlyIncome < lender.eligibility.minIncome )
-    {
-      return false
-    }
-
-    // For business owners, check additional turnover criteria if specified
-    if ( employmentType === "business" && lender.eligibility.businessMinTurnover )
-    {
-      if ( monthlyIncome < lender.eligibility.businessMinTurnover )
-      {
-        return false
+  const handleFormSubmit = async (data: CustomerInfo) => {
+    try {
+      const payload = {
+        name: data.name,
+        phone: data.phone,
+        email: data.email,
+        persona: data.persona,
+        degree: data.degree,
+        experience_years: parseInt(data.experience_years) || 0,
+        employment_type: data.employment_type,
+        cibil_band: data.cibil_band,
+        declared_income: parseInt(data.net_monthly_income) || 0,
+        existing_emi: parseInt(data.existing_emi) || 0,
+        product: data.product,
+        requested_limit: parseInt(data.requested_limit) || 0,
+        tenure_months: parseInt(data.tenure_months) || 0,
+        city: data.city,
+        pincode: data.pincode,
+        foreign_degree: data.foreign_degree,
+        college_on_list: data.college_on_list,
       }
+
+      const response = await fetch("/api/create-leads-info", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to submit form data");
+      }
+
+      const responseData = await response.json();
+
+      // Store customer info in localStorage to pass to lenders page
+      localStorage.setItem("customerInfo", JSON.stringify(responseData.data.data))
+
+      // Navigate to lenders route
+      router.push("/lenders")
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      alert("Something went wrong while submitting the form. Please try again.");
+      throw error;
     }
-
-    // Check loan amount range
-    if ( requestedLoanAmount < lender.eligibility.minLoanAmount ||
-      requestedLoanAmount > lender.eligibility.maxLoanAmount )
-    {
-      return false
-    }
-
-    return true
-  } ).map( lender => {
-    // Enhance status based on additional criteria
-    let status = lender.status
-
-    // If loan amount is at the higher end of the range, mark as partial
-    const loanAmountNum = parseFloat( loanAmount )
-    const maxLoanAmount = lender.eligibility.maxLoanAmount
-    if ( loanAmountNum > maxLoanAmount * 0.8 )
-    {
-      status = "partial"
-    }
-
-    // If income is just meeting minimum, mark as partial
-    if ( effectiveMonthlyIncome < lender.eligibility.minIncome * 1.2 )
-    {
-      status = status === "eligible" ? "partial" : status
-    }
-
-    return {
-      ...lender,
-      status
-    }
-  } ).sort( ( a, b ) => a.rank - b.rank ) // Sort by rank
-}
-
-export default function Home () {
-  const [ appState, setAppState ] = useState<AppState>( "onboarding" )
-  const [ customerInfo, setCustomerInfo ] = useState<CustomerInfo | null>( null )
-  const [ filteredLenders, setFilteredLenders ] = useState<Lender[]>( [] )
-
-  const handleFormSubmit = ( data: CustomerInfo ) => {
-    setCustomerInfo( data )
-
-    // Filter lenders based on customer information
-    const filtered = filterLenders( mockLenders, data )
-    setFilteredLenders( filtered )
-
-    setAppState( "loading" )
   }
 
-  const handleLoadingComplete = () => {
-    setAppState( "dashboard" )
-  }
-
-  if ( appState === "onboarding" )
-  {
-    return <OnboardingForm onSubmit={handleFormSubmit} />
-  }
-
-  if ( appState === "loading" )
-  {
-    return <LoadingTransition onComplete={handleLoadingComplete} />
-  }
-
-  return <LoanDashboard customerInfo={customerInfo} lenders={filteredLenders} />
+  return <OnboardingForm onSubmit={handleFormSubmit} />
 }
