@@ -5,10 +5,12 @@ import { Loader2, TrendingUp, CheckCircle2 } from "lucide-react"
 
 interface LoadingTransitionProps {
   onComplete: () => void
+  dataReady?: boolean
 }
 
-export function LoadingTransition({ onComplete }: LoadingTransitionProps) {
+export function LoadingTransition({ onComplete, dataReady = false }: LoadingTransitionProps) {
   const [step, setStep] = useState(0)
+  const [animationComplete, setAnimationComplete] = useState(false)
 
   const steps = [
     "Analyzing your profile...",
@@ -17,6 +19,7 @@ export function LoadingTransition({ onComplete }: LoadingTransitionProps) {
     "Finding smartest options...",
   ]
 
+  // Handle step progression animation
   useEffect(() => {
     const stepInterval = setInterval(() => {
       setStep((prev) => {
@@ -27,15 +30,23 @@ export function LoadingTransition({ onComplete }: LoadingTransitionProps) {
       })
     }, 800)
 
-    const completeTimeout = setTimeout(() => {
-      onComplete()
+    // Mark animation as complete after minimum time
+    const animationTimeout = setTimeout(() => {
+      setAnimationComplete(true)
     }, 3500)
 
     return () => {
       clearInterval(stepInterval)
-      clearTimeout(completeTimeout)
+      clearTimeout(animationTimeout)
     }
-  }, [onComplete])
+  }, [])
+
+  // Only complete when both animation is done AND data is ready
+  useEffect(() => {
+    if (animationComplete && dataReady) {
+      onComplete()
+    }
+  }, [animationComplete, dataReady, onComplete])
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-background via-background to-primary/5">
@@ -56,9 +67,8 @@ export function LoadingTransition({ onComplete }: LoadingTransitionProps) {
           {steps.map((stepText, index) => (
             <div
               key={index}
-              className={`flex items-center gap-3 rounded-lg p-3 transition-all duration-500 ${
-                index <= step ? "bg-primary/10" : "bg-muted/30"
-              }`}
+              className={`flex items-center gap-3 rounded-lg p-3 transition-all duration-500 ${index <= step ? "bg-primary/10" : "bg-muted/30"
+                }`}
             >
               {index < step ? (
                 <CheckCircle2 className="h-5 w-5 shrink-0 text-success animate-in zoom-in duration-300" />
