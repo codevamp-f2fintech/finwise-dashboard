@@ -132,24 +132,6 @@ export function ConsentModal({ open, onOpenChange, onAccept, onHardResults, lend
     }))
   }
 
-  const uploadDocuments = async (formData: FormData) => {
-    try {
-      const response = await fetch('/api/check-eligibility', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const result = await response.json();
-      return result;
-    } catch (error) {
-      console.error('Upload error:', error);
-      throw error;
-    }
-  };
 
   // Update a single processing step
   const updateStep = (stepId: ProcessingStepId, status: ProcessingStatus, message: string) => {
