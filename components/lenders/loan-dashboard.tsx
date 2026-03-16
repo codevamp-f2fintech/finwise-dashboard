@@ -48,9 +48,9 @@ export function LoanDashboard({
   const [stage, setStage] = useState<Stage>("A");
   const [showConsentModal, setShowConsentModal] = useState(false);
   const [selectedLender, setSelectedLender] = useState<Lender | null>(null);
-  const [isMobile, setIsMobile] = useState(false);
   const [isSelecting, setIsSelecting] = useState(false);
   const [hardUpdatedLenders, setHardUpdatedLenders] = useState<Lender[] | null>(null);
+  const [showMobileChat, setShowMobileChat] = useState(false);
 
   // NEW: State for AI-filtered lenders
   const [aiFilteredLenderIds, setAiFilteredLenderIds] = useState<string[] | null>(null);
@@ -110,17 +110,7 @@ export function LoanDashboard({
     }
   };
 
-  // Check if device is mobile
-  useEffect(() => {
-    const checkDevice = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
 
-    checkDevice();
-    window.addEventListener("resize", checkDevice);
-
-    return () => window.removeEventListener("resize", checkDevice);
-  }, []);
 
   const handleConsentAccept = () => {
     setShowConsentModal(false);
@@ -473,10 +463,10 @@ export function LoanDashboard({
                       }}
                     >
                       <CardHeader className="pb-4">
-                        <div className="flex items-start justify-between pt-2">
-                          <div className="space-y-2">
-                            <div className="flex items-center gap-2">
-                              <CardTitle className="text-xl text-gray-800">
+                        <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between pt-2">
+                          <div className="space-y-1.5">
+                            <div className="flex flex-wrap items-center gap-2">
+                              <CardTitle className="text-lg sm:text-xl text-gray-800">
                                 {lender.name}
                               </CardTitle>
                               {isAiFiltered && (
@@ -486,7 +476,7 @@ export function LoanDashboard({
                                 </Badge>
                               )}
                             </div>
-                            <div className="flex items-center gap-2">
+                            <div className="flex flex-wrap items-center gap-2">
                               <Badge
                                 variant="outline"
                                 className="bg-blue-50 text-[#3f50b5] border-blue-200"
@@ -503,7 +493,7 @@ export function LoanDashboard({
                               )}
                             </div>
                           </div>
-                          {getStatusBadge(lender.status)}
+                          <div className="self-start">{getStatusBadge(lender.status)}</div>
                         </div>
                       </CardHeader>
 
@@ -633,15 +623,11 @@ export function LoanDashboard({
                         </div>
 
                         {/* CTA */}
-                        <div
-                          className={`flex gap-3 ${isMobile ? "flex-row" : "flex-col"
-                            }`}
-                        >
+                        <div className="flex flex-row gap-3 sm:flex-col">
                           <Button
                             onClick={() => handleApply(lender)}
                             disabled={lender.status === "ineligible"}
-                            className={`gap-2 bg-gradient-to-r from-[#3f50b5] to-[#5c6bc0] hover:from-[#354497] hover:to-[#4a58a5] text-white shadow-lg hover:shadow-xl transition-all duration-300 rounded-xl py-6 text-base font-semibold ${isMobile ? "w-[50%]" : "w-full"
-                              }`}
+                            className="flex-1 sm:flex-none sm:w-full gap-2 bg-gradient-to-r from-[#3f50b5] to-[#5c6bc0] hover:from-[#354497] hover:to-[#4a58a5] text-white shadow-lg hover:shadow-xl transition-all duration-300 rounded-xl py-6 text-base font-semibold"
                             size="lg"
                           >
                             {stage === "A"
@@ -650,16 +636,15 @@ export function LoanDashboard({
                             <ArrowRight className="h-5 w-5" />
                           </Button>
 
-                          {isMobile && (
-                            <Button
-                              onClick={handleCall}
-                              className="w-[50%] gap-2 bg-gradient-to-r from-[#3fb56c] to-[#5cc0b3] hover:from-[#359a5c] hover:to-[#4ca895] text-white shadow-lg hover:shadow-xl transition-all duration-300 rounded-xl py-6 text-base font-semibold"
-                              size="lg"
-                            >
-                              Call
-                              <Phone className="h-5 w-5" />
-                            </Button>
-                          )}
+                          {/* Call button — always shown on mobile (flex-row), hidden on sm+ */}
+                          <Button
+                            onClick={handleCall}
+                            className="flex-1 sm:hidden gap-2 bg-gradient-to-r from-[#3fb56c] to-[#5cc0b3] hover:from-[#359a5c] hover:to-[#4ca895] text-white shadow-lg hover:shadow-xl transition-all duration-300 rounded-xl py-6 text-base font-semibold"
+                            size="lg"
+                          >
+                            Call
+                            <Phone className="h-5 w-5" />
+                          </Button>
                         </div>
                       </CardContent>
                     </Card>
@@ -669,8 +654,8 @@ export function LoanDashboard({
             )}
           </div>
 
-          {/* Chat Assistant */}
-          <div className="lg:max-h-[100vh] lg:flex lg:flex-col lg:min-h-0 sticky top-[6px] self-start">
+          {/* Chat Assistant — desktop sidebar only (always hidden inside grid on mobile) */}
+          <div className="hidden lg:flex lg:max-h-[100vh] lg:flex-col lg:min-h-0 lg:sticky lg:top-[6px] lg:self-start">
             <br /> <br />
             <ChatAssistant
               stage={stage}
@@ -683,6 +668,50 @@ export function LoanDashboard({
           </div>
         </div>
       </div>
+
+      {/* Mobile Chat Overlay — fixed full-screen, only on mobile, hidden on lg+ */}
+      {showMobileChat && (
+        <div className="fixed inset-0 z-50 lg:hidden flex flex-col bg-black/40 backdrop-blur-sm">
+          {/* Overlay header bar */}
+          <div className="flex items-center justify-between px-4 py-3 bg-[#008069] text-white shrink-0">
+            <div className="flex items-center gap-2">
+              <Sparkles className="h-5 w-5" />
+              <span className="font-semibold text-base">Ask Dr. Finwise</span>
+            </div>
+            <button
+              onClick={() => setShowMobileChat(false)}
+              className="p-1.5 rounded-full hover:bg-white/20 transition-colors"
+              aria-label="Close chat"
+            >
+              <XCircle className="h-6 w-6" />
+            </button>
+          </div>
+          {/* Chat panel fills remaining space */}
+          <div className="flex-1 min-h-0 overflow-hidden p-3">
+            <ChatAssistant
+              stage={stage}
+              customerInfo={customerInfo}
+              lenders={allLenders}
+              onLenderSelection={(ids, reasoning) => {
+                handleAiLenderSelection(ids, reasoning);
+                setShowMobileChat(false);
+              }}
+              onSelectionStart={() => setIsSelecting(true)}
+              onSelectionEnd={() => setIsSelecting(false)}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Mobile Chat FAB — hidden on lg+ */}
+      <button
+        onClick={() => setShowMobileChat(prev => !prev)}
+        className="fixed bottom-6 right-6 z-40 lg:hidden flex items-center gap-2 bg-[#008069] text-white px-4 py-3 rounded-full shadow-xl hover:bg-[#006e58] active:scale-95 transition-all duration-200"
+        aria-label="Toggle chat assistant"
+      >
+        <Sparkles className="h-5 w-5" />
+        <span className="text-sm font-semibold">Ask Dr. Finwise</span>
+      </button>
 
       {/* Consent Modal */}
       <ConsentModal

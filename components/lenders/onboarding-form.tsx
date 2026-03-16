@@ -141,10 +141,10 @@ export function OnboardingForm({ onSubmit }: OnboardingFormProps) {
           </CardDescription>
         </CardHeader>
 
-        <CardContent className="px-8 pb-6 pt-2">
+        <CardContent className="px-4 sm:px-8 pb-6 pt-2">
           <form onSubmit={handleSubmit}>
             {/* Row 1: Name, Phone, Email */}
-            <div className="grid grid-cols-3 gap-4 mb-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
               <div>
                 <Label className={labelStyle}>Full Name</Label>
                 <Input
@@ -176,7 +176,7 @@ export function OnboardingForm({ onSubmit }: OnboardingFormProps) {
             </div>
 
             {/* Row 2: Profession, Qualification, Experience */}
-            <div className="grid grid-cols-3 gap-4 mb-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
               <div>
                 <Label className={labelStyle}>Profession</Label>
                 <Select value={formData.persona} onValueChange={(v) => updateField("persona", v)}>
@@ -216,7 +216,7 @@ export function OnboardingForm({ onSubmit }: OnboardingFormProps) {
             </div>
 
             {/* Row 3: Employment, CIBIL, Income */}
-            <div className="grid grid-cols-3 gap-4 mb-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
               <div>
                 <Label className={labelStyle}>Employment</Label>
                 <Select value={formData.employment_type} onValueChange={(v) => updateField("employment_type", v)}>
@@ -255,7 +255,7 @@ export function OnboardingForm({ onSubmit }: OnboardingFormProps) {
             </div>
 
             {/* Row 4: Existing EMI, Loan Type, Loan Amount */}
-            <div className="grid grid-cols-3 gap-4 mb-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
               <div>
                 <Label className={labelStyle}>Existing EMIs (₹)</Label>
                 <Input
@@ -291,7 +291,7 @@ export function OnboardingForm({ onSubmit }: OnboardingFormProps) {
             </div>
 
             {/* Row 5: Tenure, City, Pincode */}
-            <div className="grid grid-cols-3 gap-4 mb-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
               <div>
                 <Label className={labelStyle}>Tenure</Label>
                 <Select value={formData.tenure_months} onValueChange={(v) => updateField("tenure_months", v)}>
@@ -326,7 +326,7 @@ export function OnboardingForm({ onSubmit }: OnboardingFormProps) {
             </div>
 
             {/* Row 6: Foreign Degree, College */}
-            <div className="grid grid-cols-3 gap-4 mb-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-5">
               <div>
                 <Label className={labelStyle}>Foreign Degree?</Label>
                 <Select
@@ -364,7 +364,7 @@ export function OnboardingForm({ onSubmit }: OnboardingFormProps) {
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-80 h-11 gap-2 font-semibold bg-gradient-to-r from-[#3f50b5] to-[#5c6bc0] hover:from-[#354497] hover:to-[#4a58a5] text-white shadow-lg hover:shadow-xl transition-all rounded-lg disabled:opacity-70"
+                className="w-full sm:w-80 h-11 gap-2 font-semibold bg-gradient-to-r from-[#3f50b5] to-[#5c6bc0] hover:from-[#354497] hover:to-[#4a58a5] text-white shadow-lg hover:shadow-xl transition-all rounded-lg disabled:opacity-70"
               >
                 {isLoading ? (
                   <>

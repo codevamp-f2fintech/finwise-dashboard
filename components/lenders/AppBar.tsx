@@ -38,72 +38,71 @@ const pages = [
     { title: "Sign Up", href: "/signup" },
 ];
 
-export default function AppBar () {
-    const [ anchorEl, setAnchorEl ] = useState<null | HTMLElement>( null );
-    const [ userMenuAnchorEl, setUserMenuAnchorEl ] = useState<null | HTMLElement>( null );
-    const [ userNotificationAnchorEl, setUserNotificationAnchorEl ] = useState<null | HTMLElement>( null );
-    const [ notifications, setNotifications ] = useState<any[]>( [] );
-    const [ visibleNotificationsCount, setVisibleNotificationsCount ] = useState( 5 );
-    const [ open, setOpen ] = useState( false );
+export default function AppBar() {
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const [userMenuAnchorEl, setUserMenuAnchorEl] = useState<null | HTMLElement>(null);
+    const [userNotificationAnchorEl, setUserNotificationAnchorEl] = useState<null | HTMLElement>(null);
+    const [notifications, setNotifications] = useState<any[]>([]);
+    const [visibleNotificationsCount, setVisibleNotificationsCount] = useState(5);
+    const [open, setOpen] = useState(false);
 
     const router = useRouter();
     const pathname = usePathname();
-    const isMobile = useMediaQuery( "(max-width: 900px)" );
+    const isMobile = useMediaQuery("(max-width: 900px)");
     const theme = useTheme();
 
     // Mock user data - replace with your actual authentication logic
-    const [ customer, setCustomer ] = useState<any>( null );
+    const [customer, setCustomer] = useState<any>(null);
 
-    useEffect( () => {
+    useEffect(() => {
         // Check if user is logged in (you'll need to implement your auth logic)
-        const userInfo = typeof window !== 'undefined' ? localStorage.getItem( "customerInfo" ) : null;
-        if ( userInfo )
-        {
-            setCustomer( JSON.parse( userInfo ) );
+        const userInfo = typeof window !== 'undefined' ? localStorage.getItem("customerInfo") : null;
+        if (userInfo) {
+            setCustomer(JSON.parse(userInfo));
         }
-    }, [] );
+    }, []);
 
     const username = customer?.name;
     const customerId = customer?.id;
 
-    const handleMenuOpen = ( event: React.MouseEvent<HTMLElement> ) => {
-        setAnchorEl( event.currentTarget );
+    const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
     };
 
     const handleMenuClose = () => {
-        setAnchorEl( null );
+        setAnchorEl(null);
     };
 
-    const handleNotificationMenuOpen = ( event: React.MouseEvent<HTMLElement> ) => {
-        setUserNotificationAnchorEl( event.currentTarget );
+    const handleNotificationMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+        setUserNotificationAnchorEl(event.currentTarget);
     };
 
     const handleNotificationMenuClose = () => {
-        setUserNotificationAnchorEl( null );
-        setVisibleNotificationsCount( 5 );
+        setUserNotificationAnchorEl(null);
+        setVisibleNotificationsCount(5);
     };
 
-    const handleUserMenuOpen = ( event: React.MouseEvent<HTMLElement> ) => {
-        setUserMenuAnchorEl( event.currentTarget );
+    const handleUserMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+        setUserMenuAnchorEl(event.currentTarget);
     };
 
     const handleUserMenuClose = () => {
-        setUserMenuAnchorEl( null );
+        setUserMenuAnchorEl(null);
     };
 
     const handleLogout = () => {
         localStorage.clear();
-        setCustomer( null );
+        setCustomer(null);
         handleUserMenuClose();
-        router.push( "/" );
+        router.push("/");
     };
 
     const handleResetPassword = () => {
         handleUserMenuClose();
-        router.push( "/reset-password" );
+        router.push("/reset-password");
     };
 
-    const toggleDrawer = ( state: boolean ) => () => setOpen( state );
+    const toggleDrawer = (state: boolean) => () => setOpen(state);
 
     // External website URLs - update these with your actual URLs
     const externalUrls = {
@@ -113,21 +112,21 @@ export default function AppBar () {
         blogs: "https://f2fintech.com/blogs",
     };
 
-    const handleExternalNavigation = ( url: string ) => {
+    const handleExternalNavigation = (url: string) => {
         window.location.href = url;
     };
 
-    const handleInternalNavigation = ( path: string ) => {
-        router.push( path );
+    const handleInternalNavigation = (path: string) => {
+        router.push(path);
     };
 
     const drawerWidth = 200;
-    const DrawerHeader = styled( "div" )( () => ( {
+    const DrawerHeader = styled("div")(() => ({
         display: "flex",
         alignItems: "center",
         padding: "5px",
         justifyContent: "flex-end",
-    } ) );
+    }));
 
     return (
         <>
@@ -183,17 +182,17 @@ export default function AppBar () {
                         variant="temporary"
                         anchor="right"
                         open={open}
-                        onClose={toggleDrawer( false )}
+                        onClose={toggleDrawer(false)}
                     >
                         <DrawerHeader>
-                            <IconButton sx={{ color: "#000" }} onClick={toggleDrawer( false )}>
+                            <IconButton sx={{ color: "#000" }} onClick={toggleDrawer(false)}>
                                 <ChevronRightIcon />
                             </IconButton>
                         </DrawerHeader>
                         <Divider />
 
                         <Button
-                            onClick={() => handleExternalNavigation( externalUrls.home )}
+                            onClick={() => handleExternalNavigation(externalUrls.home)}
                             sx={{
                                 height: "40px",
                                 textTransform: "none",
@@ -208,7 +207,7 @@ export default function AppBar () {
                         </Button>
 
                         <Button
-                            onClick={() => handleExternalNavigation( externalUrls.about )}
+                            onClick={() => handleExternalNavigation(externalUrls.about)}
                             sx={{
                                 height: "40px",
                                 textTransform: "none",
@@ -222,7 +221,7 @@ export default function AppBar () {
                         </Button>
 
                         <Button
-                            onClick={() => handleExternalNavigation( externalUrls.blogs )}
+                            onClick={() => handleExternalNavigation(externalUrls.blogs)}
                             sx={{
                                 height: "40px",
                                 textTransform: "none",
@@ -236,7 +235,7 @@ export default function AppBar () {
                         </Button>
 
                         <Button
-                            onClick={() => handleExternalNavigation( externalUrls.saas )}
+                            onClick={() => handleExternalNavigation(externalUrls.saas)}
                             sx={{
                                 height: "40px",
                                 textTransform: "none",
@@ -264,21 +263,21 @@ export default function AppBar () {
                                         color: theme.palette.text.primary,
                                     }}
                                 >
-                                    {username.split( " " ).map( ( n: string ) => n[ 0 ] ).join( "." )}
+                                    {username.split(" ").map((n: string) => n[0]).join(".")}
                                 </Button>
 
-                                {Boolean( userMenuAnchorEl ) && (
+                                {Boolean(userMenuAnchorEl) && (
                                     <List>
-                                        {[ "Profile", "Favourites", "Loan Tracker", "Reset Password", "Logout" ].map( ( text ) => (
+                                        {["Profile", "Favourites", "Loan Tracker", "Reset Password", "Logout"].map((text) => (
                                             <ListItem key={text} disablePadding>
                                                 <ListItemButton
                                                     onClick={text === "Logout" ? handleLogout : undefined}
-                                                    href={text !== "Logout" ? `/${ text.toLowerCase().split( " " ).join( "-" ) }` : "#"}
+                                                    href={text !== "Logout" ? `/${text.toLowerCase().split(" ").join("-")}` : "#"}
                                                 >
                                                     <ListItemText primary={text} />
                                                 </ListItemButton>
                                             </ListItem>
-                                        ) )}
+                                        ))}
                                     </List>
                                 )}
                             </>
@@ -303,24 +302,17 @@ export default function AppBar () {
                     </Drawer>
 
                     {/* Mobile Menu Icon */}
-                    {/* <IconButton
-                        edge="start"
-                        onClick={toggleDrawer( true )}
+                    <IconButton
+                        edge="end"
+                        onClick={toggleDrawer(true)}
                         sx={{
                             display: {
                                 xs: "flex",
                                 md: "none",
-                                color: "#2c3ce3",
                             },
-                            marginRight: {
-                                xs: "20px",
-                                sm: "0px",
-                                md: "",
-                            },
-                            marginLeft: {
-                                sm: "80px",
-                            },
-                            border: "2px solid"
+                            color: "#2c3ce3",
+                            marginLeft: "auto",
+                            marginRight: "16px",
                         }}
                     >
                         <MenuIcon
@@ -331,7 +323,7 @@ export default function AppBar () {
                                 },
                             }}
                         />
-                    </IconButton> */}
+                    </IconButton>
 
                     {/* Desktop Menu */}
                     <Box
@@ -344,7 +336,7 @@ export default function AppBar () {
                         }}
                     >
                         <Button
-                            onClick={() => handleExternalNavigation( externalUrls.home )}
+                            onClick={() => handleExternalNavigation(externalUrls.home)}
                             sx={{
                                 fontSize: "1vw",
                                 color: theme.palette.text.primary,
@@ -360,7 +352,7 @@ export default function AppBar () {
                         </Button>
 
                         <Button
-                            onClick={() => handleExternalNavigation( externalUrls.about )}
+                            onClick={() => handleExternalNavigation(externalUrls.about)}
                             sx={{
                                 fontSize: "1vw",
                                 color: theme.palette.text.primary,
@@ -376,7 +368,7 @@ export default function AppBar () {
                         </Button>
 
                         <Button
-                            onClick={() => handleExternalNavigation( externalUrls.blogs )}
+                            onClick={() => handleExternalNavigation(externalUrls.blogs)}
                             sx={{
                                 fontSize: "1vw",
                                 color: theme.palette.text.primary,
@@ -393,7 +385,7 @@ export default function AppBar () {
 
                         <Tooltip title="Explore our more products" arrow>
                             <Button
-                                onClick={() => handleExternalNavigation( externalUrls.saas )}
+                                onClick={() => handleExternalNavigation(externalUrls.saas)}
                                 sx={{
                                     fontSize: "1vw",
                                     color: theme.palette.text.primary,
@@ -426,12 +418,12 @@ export default function AppBar () {
                                         },
                                     }}
                                 >
-                                    {username.split( " " ).map( ( n: string ) => n[ 0 ] ).join( "." )}
+                                    {username.split(" ").map((n: string) => n[0]).join(".")}
                                 </Button>
 
                                 <Menu
                                     anchorEl={userMenuAnchorEl}
-                                    open={Boolean( userMenuAnchorEl )}
+                                    open={Boolean(userMenuAnchorEl)}
                                     onClose={handleUserMenuClose}
                                     anchorOrigin={{
                                         vertical: "bottom",
@@ -449,7 +441,7 @@ export default function AppBar () {
                                     }}
                                 >
                                     <MenuItem
-                                        onClick={() => handleExternalNavigation( `${ externalUrls.home }/profile` )}
+                                        onClick={() => handleExternalNavigation(`${externalUrls.home}/profile`)}
                                         sx={{
                                             color: theme.palette.primary.main,
                                             fontFamily: "Poppins",
@@ -460,7 +452,7 @@ export default function AppBar () {
                                         Profile
                                     </MenuItem>
                                     <MenuItem
-                                        onClick={() => handleExternalNavigation( `${ externalUrls.home }/favourites` )}
+                                        onClick={() => handleExternalNavigation(`${externalUrls.home}/favourites`)}
                                         sx={{
                                             color: theme.palette.primary.main,
                                             fontFamily: "Poppins",
@@ -471,7 +463,7 @@ export default function AppBar () {
                                         Favourites
                                     </MenuItem>
                                     <MenuItem
-                                        onClick={() => handleExternalNavigation( `${ externalUrls.home }/loan-tracker` )}
+                                        onClick={() => handleExternalNavigation(`${externalUrls.home}/loan-tracker`)}
                                         sx={{
                                             color: theme.palette.primary.main,
                                             fontFamily: "Poppins",
