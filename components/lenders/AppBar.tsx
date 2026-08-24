@@ -37,9 +37,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 
 import { pages, products } from "../../lib/Data";
 
-const MAIN_WEB_URL = (process.env.NEXT_PUBLIC_BASE_URL && process.env.NEXT_PUBLIC_BASE_URL !== "http://localhost:3000")
-  ? process.env.NEXT_PUBLIC_BASE_URL
-  : "http://localhost:5173";
+const MAIN_WEB_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://f2fintech.com";
 const getWebUrl = (path: string) => path.startsWith("http") ? path : `${MAIN_WEB_URL}${path}`;
 const Utility = () => ({
   getLocalStorage: (key) => {
