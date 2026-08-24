@@ -90,7 +90,7 @@ export const mockLenders: Lender[] = [
             "Higher maximum interest rate",
             "Higher minimum salary requirement (₹35,000)"
         ],
-        status: "eligible",
+        status: "partial",
         rank: 2,
         totalCharges: "Processing fee (inclusive of taxes)",
         docsRequired: [
@@ -170,7 +170,7 @@ export const mockLenders: Lender[] = [
             "Requires CIBIL ≥700",
             "Shorter maximum tenure (60 months)"
         ],
-        status: "eligible",
+        status: "partial",
         rank: 4,
         totalCharges: "Processing fee: Up to 2% of loan amount + taxes",
         docsRequired: [
@@ -224,7 +224,7 @@ export const mockLenders: Lender[] = [
         ],
         eligibilityCriteria: "Min age: 21, Max age: 60, Min monthly salary: ₹35,000, Min work exp: 2 years, Min CIBIL: 685, FOIR: 55-60%",
         eligibility: {
-            employmentTypes: ["salaried"],
+            employmentTypes: ["salaried", "doctor", "self_employed", "business_owner", "ca"],
             minIncome: 35000,
             minLoanAmount: 50000,
             maxLoanAmount: 1000000
@@ -510,7 +510,7 @@ export const mockLenders: Lender[] = [
         ],
         eligibilityCriteria: "Min age: 21, Max age: 60, Min monthly salary: ₹35,000, Min work exp: 2 years, Min CIBIL: 685",
         eligibility: {
-            employmentTypes: ["salaried"],
+            employmentTypes: ["salaried", "doctor", "self_employed", "business_owner", "ca"],
             minIncome: 35000,
             minLoanAmount: 50000,
             maxLoanAmount: 1000000

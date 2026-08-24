@@ -112,7 +112,7 @@ export function ConsentModal({ open, onOpenChange, onAccept, onHardResults, lend
 
   const handleAccept = () => {
     if (bureauConsent && termsConsent) {
-      setStep('documents')
+      onAccept()
     }
   }
 
@@ -220,7 +220,7 @@ export function ConsentModal({ open, onOpenChange, onAccept, onHardResults, lend
         const docFormData = new FormData();
         docFormData.append("document", file);
         docFormData.append("folder", `document/${file.name}`);
-        docFormData.append("companyId", 101);
+        docFormData.append("companyId", "101");
 
         const uploadResponse = await fetch("/api/upload-to-s3", {
           method: "POST",
@@ -390,10 +390,10 @@ export function ConsentModal({ open, onOpenChange, onAccept, onHardResults, lend
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="max-w-[95vw] w-full sm:mx-auto sm:max-w-[500px] md:max-w-[550px] lg:max-w-[600px] max-h-[90vh] sm:max-h-[85vh] overflow-hidden flex flex-col">
+      <DialogContent className="max-w-[95vw] w-full sm:mx-auto sm:max-w-[520px] md:max-w-[580px] lg:max-w-[620px] max-h-[92vh] sm:max-h-[85vh] overflow-hidden flex flex-col p-4 sm:p-6">
         <DialogHeader className="shrink-0">
           <div className="flex items-center gap-3">
-            <div className={`flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full ${step === 'results'
+            <div className={`flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full shrink-0 ${step === 'results'
               ? eligibilityResult?.eligible
                 ? 'bg-green-100'
                 : 'bg-red-100'
@@ -517,7 +517,7 @@ export function ConsentModal({ open, onOpenChange, onAccept, onHardResults, lend
                       disabled={isLoading}
                     />
                     {documents.aadhaar && (
-                      <p className="text-xs text-green-600">✓ {documents.aadhaar.name} ({(documents.aadhaar.size / (1024 * 1024)).toFixed(2)}MB)</p>
+                      <p className="text-xs text-green-600 truncate">✓ {documents.aadhaar.name} ({(documents.aadhaar.size / (1024 * 1024)).toFixed(2)}MB)</p>
                     )}
                     <p className="text-xs text-muted-foreground">Maximum file size: 5MB</p>
                   </div>
@@ -552,7 +552,7 @@ export function ConsentModal({ open, onOpenChange, onAccept, onHardResults, lend
                       disabled={isLoading}
                     />
                     {documents.pan && (
-                      <p className="text-xs text-green-600">✓ {documents.pan.name} ({(documents.pan.size / (1024 * 1024)).toFixed(2)}MB)</p>
+                      <p className="text-xs text-green-600 truncate">✓ {documents.pan.name} ({(documents.pan.size / (1024 * 1024)).toFixed(2)}MB)</p>
                     )}
                     <p className="text-xs text-muted-foreground">Maximum file size: 5MB</p>
                   </div>
@@ -587,7 +587,7 @@ export function ConsentModal({ open, onOpenChange, onAccept, onHardResults, lend
                       disabled={isLoading}
                     />
                     {documents.bankStatement && (
-                      <p className="text-xs text-green-600">✓ {documents.bankStatement.name} ({(documents.bankStatement.size / (1024 * 1024)).toFixed(2)}MB)</p>
+                      <p className="text-xs text-green-600 truncate">✓ {documents.bankStatement.name} ({(documents.bankStatement.size / (1024 * 1024)).toFixed(2)}MB)</p>
                     )}
                     <p className="text-xs text-muted-foreground">Maximum file size: 5MB</p>
                   </div>

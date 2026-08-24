@@ -1,36 +1,79 @@
 import { NextResponse } from 'next/server';
+import { getPool } from '@/lib/db';
 
 export async function POST(request: Request) {
     try {
         const body = await request.json();
 
-        const response = await fetch("https://web.f2fintech.in/api/v1/create-leads-info", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(body),
+        const {
+            name,
+            phone,
+            email,
+            persona,
+            degree,
+            experience_years,
+            employment_type,
+            cibil_band,
+            declared_income,
+            existing_emi,
+            product,
+            requested_limit,
+            tenure_months,
+            city,
+            pincode,
+            foreign_degree,
+            college_on_list,
+        } = body;
+
+        const pool = getPool();
+
+        const [result] = await pool.execute(
+            `INSERT INTO leads_info
+                (name, phone, email, persona, degree, experience_years,
+                 employment_type, cibil_band, declared_income, existing_emi,
+                 product, requested_limit, tenure_months, city, pincode,
+                 foreign_degree, college_on_list)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [
+                name ?? null,
+                phone ?? null,
+                email ?? null,
+                persona ?? null,
+                degree ?? null,
+                experience_years ?? 0,
+                employment_type ?? null,
+                cibil_band ?? null,
+                declared_income ?? 0,
+                existing_emi ?? 0,
+                product ?? null,
+                requested_limit ?? 0,
+                tenure_months ?? 0,
+                city ?? null,
+                pincode ?? null,
+                foreign_degree ?? null,
+                college_on_list ?? null,
+            ]
+        ) as mysql.ResultSetHeader[];
+
+        const insertId = (result as any).insertId;
+
+        // Fetch the newly created row to return it (matches original response shape)
+        const [rows] = await pool.execute(
+            'SELECT * FROM leads_info WHERE id = ?',
+            [insertId]
+        );
+
+        const record = (rows as any[])[0];
+
+        return NextResponse.json({
+            success: true,
+            data: { data: record },
         });
 
-        if (!response.ok) {
-            // If the upstream API fails, relay the error status
-            let errorMsg = "Failed to submit leads info to backend";
-            try {
-                const errorJson = await response.json();
-                errorMsg = errorJson.message || errorMsg;
-            } catch {
-                // upstream error wasn't JSON
-            }
-            return NextResponse.json({ error: errorMsg }, { status: response.status });
-        }
-
-        const data = await response.json();
-        return NextResponse.json(data);
-
     } catch (error: any) {
-        console.error("Error proxying leads info:", error);
+        console.error('Error inserting leads info into DB:', error);
         return NextResponse.json(
-            { error: "Internal Server Error or network issue proxying request." },
+            { error: error.message || 'Internal Server Error' },
             { status: 500 }
         );
     }

@@ -1,33 +1,49 @@
 import { NextResponse } from 'next/server';
+import { getPool } from '@/lib/db';
 
 export async function POST(request: Request) {
     try {
         const body = await request.json();
 
-        const response = await fetch("https://web.f2fintech.in/api/v1/create-leads-info-document", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(body),
+        const {
+            document_url,
+            leads_info_id,
+            type,
+            company_id,
+        } = body;
+
+        const pool = getPool();
+
+        const [result] = await pool.execute(
+            `INSERT INTO leads_info_document
+                (document_url, leads_info_id, type, company_id)
+             VALUES (?, ?, ?, ?)`,
+            [
+                document_url ?? null,
+                leads_info_id ?? null,
+                type ?? null,
+                company_id ?? null,
+            ]
+        );
+
+        const insertId = (result as any).insertId;
+
+        const [rows] = await pool.execute(
+            'SELECT * FROM leads_info_document WHERE id = ?',
+            [insertId]
+        );
+
+        const record = (rows as any[])[0];
+
+        return NextResponse.json({
+            success: true,
+            data: { data: record },
         });
 
-        if (!response.ok) {
-            let errorMsg = "Failed to create document record in backend";
-            try {
-                const errorJson = await response.json();
-                errorMsg = errorJson.message || errorMsg;
-            } catch { }
-            return NextResponse.json({ error: errorMsg }, { status: response.status });
-        }
-
-        const data = await response.json();
-        return NextResponse.json(data);
-
     } catch (error: any) {
-        console.error("Error proxying create document:", error);
+        console.error('Error inserting leads_info_document into DB:', error);
         return NextResponse.json(
-            { error: "Internal Server Error proxying request." },
+            { error: error.message || 'Internal Server Error' },
             { status: 500 }
         );
     }

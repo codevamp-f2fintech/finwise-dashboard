@@ -1,0 +1,650 @@
+﻿                  <ArrowDropDownIcon />
+                )
+              }
+              sx={{
+                height: "40px",
+                textTransform: "none",
+                color: "#000",
+                fontSize: isIpadPro ? "1.2rem" : { xs: "0.95rem", sm: "1.1rem" },
+                fontFamily: "Poppins",
+                justifyContent: "flex-start",
+              }}
+            >
+              Resources
+            </Button>
+            {Boolean(resourcesAnchorEl) && (
+              <List
+                sx={{
+                  backgroundColor: "white",
+                  color: "black",
+                  fontWeight: "100 !important",
+                }}
+              >
+                <ListItem disablePadding>
+                  <ListItemButton href={getWebUrl("/blogs")}>
+                    <ListItemText
+                      primary="Blogs"
+                      primaryTypographyProps={{
+                        style: {
+                          fontSize: isIpadPro ? "1.1rem" : "0.9rem",
+                          fontWeight: "100",
+                        },
+                      }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                  <ListItemButton onClick={() => (window.location.href = "https://finwise-eligibility.netlify.app/")}>
+                    <ListItemText
+                      primary="Eligibility Checker"
+                      primaryTypographyProps={{
+                        style: {
+                          fontSize: isIpadPro ? "1.1rem" : "0.9rem",
+                          fontWeight: "100",
+                        },
+                      }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              </List>
+            )}
+
+            <Button
+              aria-controls={b2bAnchorEl ? "b2b-menu-appbar" : undefined}
+              aria-haspopup="true"
+              onClick={b2bAnchorEl ? handleB2bMenuClose : handleB2bMenuOpen}
+              endIcon={
+                isMobile && !Boolean(b2bAnchorEl) ? (
+                  <ChevronRightIcon />
+                ) : (
+                  <ArrowDropDownIcon />
+                )
+              }
+              sx={{
+                height: "40px",
+                textTransform: "none",
+                color: "#000",
+                fontSize: isIpadPro ? "1.2rem" : { xs: "0.95rem", sm: "1.1rem" },
+                fontFamily: "Poppins",
+                justifyContent: "flex-start",
+              }}
+            >
+              B2B
+            </Button>
+            {Boolean(b2bAnchorEl) && (
+              <List
+                sx={{
+                  backgroundColor: "white",
+                  color: "black",
+                  fontWeight: "100 !important",
+                }}
+              >
+                <ListItem disablePadding>
+                  <ListItemButton href={getWebUrl("/realtor")}>
+                    <ListItemText
+                      primary="Realtor"
+                      primaryTypographyProps={{
+                        style: {
+                          fontSize: isIpadPro ? "1.1rem" : "0.9rem",
+                          fontWeight: "100",
+                        },
+                      }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                  <ListItemButton href={getWebUrl("/dsa")}>
+                    <ListItemText
+                      primary="Channel Partner/Broker"
+                      primaryTypographyProps={{
+                        style: {
+                          fontSize: isIpadPro ? "1.1rem" : "0.9rem",
+                          fontWeight: "100",
+                        },
+                      }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              </List>
+            )}
+
+            <Button
+              href={getWebUrl("/careers")}
+              sx={{
+                height: "40px",
+                textTransform: "none",
+                color: "#000",
+                fontSize: isIpadPro ? "1.2rem" : { xs: "0.95rem", sm: "1.1rem" },
+                fontFamily: "Poppins",
+                justifyContent: "flex-start",
+              }}
+            >
+              Careers
+            </Button>
+
+            <Button
+              aria-controls={regulatoryAnchorEl ? "regulatory-menu-appbar" : undefined}
+              aria-haspopup="true"
+              onClick={regulatoryAnchorEl ? handleRegulatoryMenuClose : handleRegulatoryMenuOpen}
+              endIcon={
+                isMobile && !Boolean(regulatoryAnchorEl) ? (
+                  <ChevronRightIcon />
+                ) : (
+                  <ArrowDropDownIcon />
+                )
+              }
+              sx={{
+                height: "40px",
+                textTransform: "none",
+                color: "#000",
+                fontSize: isIpadPro ? "1.2rem" : { xs: "0.95rem", sm: "1.1rem" },
+                fontFamily: "Poppins",
+                justifyContent: "flex-start",
+              }}
+            >
+              Regulatory
+            </Button>
+            {Boolean(regulatoryAnchorEl) && (
+              <List
+                sx={{
+                  backgroundColor: "white",
+                  color: "black",
+                  fontWeight: "100 !important",
+                }}
+              >
+                <ListItem disablePadding>
+                  <ListItemButton href={getWebUrl("/compliance")}>
+                    <ListItemText
+                      primary="Compliance"
+                      primaryTypographyProps={{
+                        style: {
+                          fontSize: isIpadPro ? "1.1rem" : "0.9rem",
+                          fontWeight: "100",
+                        },
+                      }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                  <ListItemButton href={getWebUrl("/fair-practices-code")}>
+                    <ListItemText
+                      primary="Fair Practices Code"
+                      primaryTypographyProps={{
+                        style: {
+                          fontSize: isIpadPro ? "1.1rem" : "0.9rem",
+                          fontWeight: "100",
+                        },
+                      }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                  <ListItemButton href={getWebUrl("/grievance-policy")}>
+                    <ListItemText
+                      primary="Grievance Policy"
+                      primaryTypographyProps={{
+                        style: {
+                          fontSize: isIpadPro ? "1.1rem" : "0.9rem",
+                          fontWeight: "100",
+                        },
+                      }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                  <ListItemButton href={getWebUrl("/privacy-policy")}>
+                    <ListItemText
+                      primary="Privacy Policy"
+                      primaryTypographyProps={{
+                        style: {
+                          fontSize: isIpadPro ? "1.1rem" : "0.9rem",
+                          fontWeight: "100",
+                        },
+                      }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                  <ListItemButton href={getWebUrl("/terms-and-condition")}>
+                    <ListItemText
+                      primary="Terms and Condition"
+                      primaryTypographyProps={{
+                        style: {
+                          fontSize: isIpadPro ? "1.1rem" : "0.9rem",
+                          fontWeight: "100",
+                        },
+                      }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              </List>
+            )}
+
+
+            {pages.map((page) => {
+              return (
+                <Button
+                  href={getWebUrl(page.href)}
+                  key={page.title}
+                  sx={{
+                    height: "40px",
+                    textTransform: "none",
+                    fontSize: isIpadPro ? "1.2rem" : { xs: "0.95rem", sm: "1.1rem" },
+                    color: "#000",
+                    fontFamily: "Poppins",
+                    justifyContent: "flex-start",
+                  }}
+                >
+                  {page.title}
+                </Button>
+              );
+            })}
+            {username && (
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+                key={username}
+              >
+                <Button
+                  onClick={
+                    Boolean(userMenuAnchorEl)
+                      ? handleUserMenuClose
+                      : handleUserMenuOpen
+                  }
+                  endIcon={
+                    isMobile && !Boolean(userMenuAnchorEl) ? (
+                      <ChevronRightIcon />
+                    ) : (
+                      <ArrowDropDownIcon />
+                    )
+                  }
+                  sx={{
+                    height: "40px",
+                    textTransform: "none",
+                    fontSize: isIpadPro ? "1.2rem" : { xs: "0.95rem", sm: "1.1rem" },
+                    borderRadius: "22px",
+                    marginRight: "10px",
+                    justifyContent: "flex-start",
+                    color: theme.palette.text.primary,
+                  }}
+                >
+                  {username
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join(".")}
+                </Button>
+                {Boolean(userMenuAnchorEl) && (
+                  <List>
+                    {[
+                      "Profile",
+                      "Favourites",
+                      "Loan Tracker",
+                      "Reset Password",
+                      "Logout",
+                    ].map((text, index) => (
+                      <ListItem key={text} disablePadding>
+                        <ListItemButton
+                          onClick={() => {
+                            if (text === "Logout") {
+                              handleLogout();
+                            } else {
+                              const path = `/${text
+                                .toLowerCase()
+                                .split(" ")
+                                .join("-")}`;
+                              navigate(path);
+                              setOpen(false);
+                            }
+                          }}
+                        >
+                          <ListItemText
+                            primary={text}
+                            primaryTypographyProps={{
+                              style: {
+                                fontSize: isIpadPro ? "1.1rem" : "inherit", // Adjusted font size for iPad Pro
+                              },
+                            }}
+                          />
+                        </ListItemButton>
+                      </ListItem>
+                    ))}
+                  </List>
+                )}
+              </div>
+            )}
+          </Drawer>
+
+          {/* Mobile Menu Icon */}
+          <IconButton
+            edge="start"
+            onClick={toggleDrawer(true)}
+            aria-label="open drawer"
+            sx={{
+              display: {
+                xs: "flex",
+                md: "none",
+              },
+              color: "#2c3ce3",
+              marginLeft: "auto",
+              marginRight: "4%",
+            }}
+          >
+            <MenuIcon
+              sx={{
+                fontSize: {
+                  xs: "2rem",
+                  sm: "2.5rem",
+                },
+              }}
+            />{" "}
+          </IconButton>
+
+          {/* SHOW ON WEB */}
+          <Box
+            sx={{
+              flex: 1,
+              display: { xs: "none", md: "flex" },
+              justifyContent: "flex-end",
+              alignItems: "center",
+              marginRight: { md: "0.5%", lg: "2%" },
+              gap: { md: "4px", lg: "12px", xl: "28px" },
+              "& .MuiButton-root": {
+                px: { md: "4px", lg: "12px", xl: "16px" },
+                whiteSpace: "nowrap",
+              },
+            }}
+          >
+            {/* aboutus  button  */}
+            <Button
+              component={Link}
+              href={getWebUrl("/")}
+              onClick={topFunction}
+              key={"web-home"}
+              disableRipple
+              sx={{
+                fontSize: isIpadPro ? "1vw" : "0.95vw",
+                textTransform: "none",
+                color: theme.palette.text.primary,
+                fontFamily: "Poppins",
+                fontWeight: 400,
+                backgroundColor: "transparent",
+                "&:hover": {
+                  transform: "scale(1.1)",
+                  // background: "#000066",
+                  transition: "all 300ms ease-in-out",
+                  backgroundColor: "transparent !important",
+                },
+                "&:focus": {
+                  backgroundColor: "transparent !important",
+                },
+                "&:active": {
+                  backgroundColor: "transparent !important",
+                },
+              }}
+            >
+              {"Home"}
+            </Button>
+
+            <Button
+              component={Link}
+              href={getWebUrl("/about-us")}
+              onClick={topFunction}
+              disableRipple
+              sx={{
+                fontSize: isIpadPro ? "1vw" : "0.95vw",
+                textTransform: "none",
+                color: theme.palette.text.primary,
+                fontFamily: "Poppins",
+                fontWeight: 400,
+                textTransform: "none",
+                backgroundColor: "transparent",
+                "&:hover": {
+                  transform: "scale(1.1)",
+                  transition: "all 300ms ease-in-out",
+                  backgroundColor: "transparent !important",
+                },
+                "&:focus": {
+                  backgroundColor: "transparent !important",
+                },
+                "&:active": {
+                  backgroundColor: "transparent !important",
+                },
+                "&.MuiButton-root": {
+                  backgroundColor: "transparent",
+                  "&:hover": {
+                    backgroundColor: "transparent !important",
+                  },
+                  "&:focus": {
+                    backgroundColor: "transparent !important",
+                  },
+                  "&:active": {
+                    backgroundColor: "transparent !important",
+                  },
+                },
+              }}
+            >
+              About Us
+            </Button>
+            {/* Product button  */}
+            <Button
+              aria-controls={anchorEl ? "menu-appbar" : undefined}
+              aria-haspopup="true"
+              onClick={isTouch ? (anchorEl ? handleMenuClose : handleMenuOpen) : handleMenuOpen}
+              onMouseEnter={isTouch ? undefined : (e) => openMenu(setAnchorEl, e)}
+              onMouseLeave={isTouch ? undefined : () => closeMenu(setAnchorEl)}
+              endIcon={<ArrowDropDownIcon />}
+              disableRipple
+              sx={{
+                fontSize: isIpadPro ? "1vw" : "0.95vw",
+                textTransform: "none",
+                color: theme.palette.text.primary,
+                fontFamily: "Poppins",
+                fontWeight: 400,
+                backgroundColor: "transparent",
+                "&:hover": {
+                  transform: "scale(1.1)",
+                  transition: "all 300ms ease-in-out",
+                  backgroundColor: "transparent !important",
+                },
+                "&:focus": {
+                  backgroundColor: "transparent !important",
+                },
+                "&:active": {
+                  backgroundColor: "transparent !important",
+                },
+                "&.MuiButton-root": {
+                  backgroundColor: "transparent",
+                  "&:hover": {
+                    backgroundColor: "transparent !important",
+                  },
+                  "&:focus": {
+                    backgroundColor: "transparent !important",
+                  },
+                  "&:active": {
+                    backgroundColor: "transparent !important",
+                  },
+                },
+              }}
+            >
+              Products
+            </Button>
+            {!isMobile && Boolean(anchorEl) && (
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleMenuClose}
+                MenuListProps={{
+                  onMouseEnter: isTouch ? undefined : keepMenu,
+                  onMouseLeave: isTouch ? undefined : () => closeMenu(setAnchorEl),
+                }}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+
+                disableScrollLock={true}
+                sx={{ pointerEvents: isTouch ? "auto" : "none" }}
+                PaperProps={{
+                  style: { pointerEvents: "auto" }
+                }}
+              >
+                {products.map((product) => {
+                  const isExternal = product.href.startsWith("http");
+                  const LinkComponent = isExternal ? "a" : Link;
+                  const linkProps = isExternal ? { href: getWebUrl(product.href) } : { href: getWebUrl(product.href) };
+                  return (
+                    <LinkComponent
+                      key={product.title}
+                      {...linkProps}
+                      style={{ textDecoration: "none", color: "black" }}
+                      onClick={() => {
+                        handleMenuClose();
+                        topFunction();
+                      }}
+                    >
+                      <MenuItem>
+                        <Typography
+                          sx={{
+                            color: "black",
+                            fontSize: isIpadPro ? "1.5vw" : "1vw",
+                            lineHeight: "2vw",
+                            fontFamily: "Poppins",
+                          }}
+                        >
+                          {product.title}
+                        </Typography>
+                      </MenuItem>
+                    </LinkComponent>
+                  );
+                })}
+              </Menu>
+            )}
+
+            <Button
+              aria-controls={resourcesAnchorEl ? "resources-menu-appbar" : undefined}
+              aria-haspopup="true"
+              onClick={isTouch ? (resourcesAnchorEl ? handleResourcesMenuClose : handleResourcesMenuOpen) : handleResourcesMenuOpen}
+              onMouseEnter={isTouch ? undefined : (e) => openMenu(setResourcesAnchorEl, e)}
+              onMouseLeave={isTouch ? undefined : () => closeMenu(setResourcesAnchorEl)}
+              endIcon={<ArrowDropDownIcon />}
+              disableRipple
+              sx={{
+                fontSize: isIpadPro ? "1vw" : "0.95vw",
+                textTransform: "none",
+                color: theme.palette.text.primary,
+                fontFamily: "Poppins",
+                fontWeight: 400,
+                backgroundColor: "transparent",
+                "&:hover": {
+                  transform: "scale(1.1)",
+                  transition: "all 300ms ease-in-out",
+                  backgroundColor: "transparent !important",
+                },
+                "&:focus": {
+                  backgroundColor: "transparent !important",
+                },
+                "&:active": {
+                  backgroundColor: "transparent !important",
+                },
+                "&.MuiButton-root": {
+                  backgroundColor: "transparent",
+                  "&:hover": {
+                    backgroundColor: "transparent !important",
+                  },
+                  "&:focus": {
+                    backgroundColor: "transparent !important",
+                  },
+                  "&:active": {
+                    backgroundColor: "transparent !important",
+                  },
+                },
+              }}
+            >
+              Resources
+            </Button>
+            {!isMobile && Boolean(resourcesAnchorEl) && (
+              <Menu
+                id="resources-menu-appbar"
+                anchorEl={resourcesAnchorEl}
+                open={Boolean(resourcesAnchorEl)}
+                onClose={handleResourcesMenuClose}
+                MenuListProps={{
+                  onMouseEnter: isTouch ? undefined : keepMenu,
+                  onMouseLeave: isTouch ? undefined : () => closeMenu(setResourcesAnchorEl),
+                }}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+
+                disableScrollLock={true}
+                sx={{ pointerEvents: isTouch ? "auto" : "none" }}
+                PaperProps={{
+                  style: { pointerEvents: "auto" }
+                }}
+              >
+                <Link
+                  href={getWebUrl("/blogs")}
+                  style={{ textDecoration: "none", color: "black" }}
+                  onClick={() => {
+                    handleResourcesMenuClose();
+                    topFunction();
+                  }}
+                >
+                  <MenuItem>
+                    <Typography
+                      sx={{
+                        color: "black",
+                        fontSize: isIpadPro ? "1.5vw" : "1vw",
+                        lineHeight: "2vw",
+                        fontFamily: "Poppins",
+                      }}
+                    >
+                      Blogs
+                    </Typography>
+                  </MenuItem>
+                </Link>
+                <Link
+                  href="#"
+                  style={{ textDecoration: "none", color: "black" }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleResourcesMenuClose();
+                    topFunction();
+                    window.location.href = "https://finwise-eligibility.netlify.app/";
+                  }}
+                >
+                  <MenuItem>
+                    <Typography
+                      sx={{
+                        color: "black",
+                        fontSize: isIpadPro ? "1.5vw" : "1vw",
+                        lineHeight: "2vw",
+                        fontFamily: "Poppins",
+                      }}
+                    >
+                      Eligibility Checker
+                    </Typography>
+                  </MenuItem>
+                </Link>
+              </Menu>
+            )}
+
+            <Button
+              aria-controls={b2bAnchorEl ? "b2b-menu-appbar" : undefined}
+              aria-haspopup="true"
+              onClick={b2bAnchorEl ? handleB2bMenuClose : handleB2bMenuOpen}
+              endIcon={
+                isMobile && !Boolean(b2bAnchorEl) ? (
+                  <ChevronRightIcon />
