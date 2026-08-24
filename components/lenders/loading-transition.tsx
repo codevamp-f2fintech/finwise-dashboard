@@ -49,35 +49,35 @@ export function LoadingTransition({ onComplete, dataReady = false }: LoadingTran
   }, [animationComplete, dataReady, onComplete])
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-background via-background to-primary/5">
-      <div className="space-y-8 text-center animate-in fade-in duration-500">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-background via-background to-primary/5 p-4 sm:p-8">
+      <div className="space-y-6 sm:space-y-8 text-center animate-in fade-in duration-500 max-w-sm sm:max-w-md w-full">
         {/* Icon */}
-        <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-primary/10 animate-pulse">
-          <TrendingUp className="h-12 w-12 text-primary" />
+        <div className="mx-auto flex h-16 w-16 sm:h-24 sm:w-24 items-center justify-center rounded-full bg-primary/10 animate-pulse">
+          <TrendingUp className="h-8 w-8 sm:h-12 sm:w-12 text-primary" />
         </div>
 
         {/* Main Message */}
-        <div className="space-y-2">
-          <h2 className="text-3xl font-bold text-balance">Finding the smartest loan options for you</h2>
-          <p className="text-lg text-muted-foreground text-pretty">This will only take a moment...</p>
+        <div className="space-y-1.5 sm:space-y-2">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-balance leading-snug">Finding the smartest loan options for you</h2>
+          <p className="text-sm sm:text-base md:text-lg text-muted-foreground text-pretty">This will only take a moment...</p>
         </div>
 
         {/* Progress Steps */}
-        <div className="mx-auto max-w-md space-y-3">
+        <div className="space-y-2.5 sm:space-y-3">
           {steps.map((stepText, index) => (
             <div
               key={index}
-              className={`flex items-center gap-3 rounded-lg p-3 transition-all duration-500 ${index <= step ? "bg-primary/10" : "bg-muted/30"
+              className={`flex items-center gap-3 rounded-xl p-3 sm:p-3.5 transition-all duration-500 ${index <= step ? "bg-primary/10" : "bg-muted/30"
                 }`}
             >
               {index < step ? (
-                <CheckCircle2 className="h-5 w-5 shrink-0 text-success animate-in zoom-in duration-300" />
+                <CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5 shrink-0 text-green-600 animate-in zoom-in duration-300" />
               ) : index === step ? (
-                <Loader2 className="h-5 w-5 shrink-0 animate-spin text-primary" />
+                <Loader2 className="h-4 w-4 sm:h-5 sm:w-5 shrink-0 animate-spin text-primary" />
               ) : (
-                <div className="h-5 w-5 shrink-0 rounded-full border-2 border-muted-foreground/30" />
+                <div className="h-4 w-4 sm:h-5 sm:w-5 shrink-0 rounded-full border-2 border-muted-foreground/30" />
               )}
-              <span className={`text-sm ${index <= step ? "font-medium text-foreground" : "text-muted-foreground"}`}>
+              <span className={`text-xs sm:text-sm text-left ${index <= step ? "font-medium text-foreground" : "text-muted-foreground"}`}>
                 {stepText}
               </span>
             </div>

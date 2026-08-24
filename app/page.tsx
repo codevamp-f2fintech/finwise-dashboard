@@ -3,6 +3,8 @@
 import { useRouter } from "next/navigation"
 import { OnboardingForm, type CustomerInfo } from "@/components/lenders/onboarding-form"
 
+import { Footer } from "@/components/footer"
+
 export default function Home() {
   const router = useRouter()
 
@@ -43,7 +45,11 @@ export default function Home() {
       const responseData = await response.json();
 
       // Store customer info in localStorage to pass to lenders page
-      localStorage.setItem("customerInfo", JSON.stringify(responseData.data.data))
+      localStorage.setItem("customerInfo", JSON.stringify(data))
+
+      // Clear any previous cached results to ensure a fresh loading screen on new submit
+      sessionStorage.removeItem("lendersResult")
+      sessionStorage.removeItem("lendersResultInfo")
 
       // Navigate to lenders route
       router.push("/lenders")
@@ -54,5 +60,12 @@ export default function Home() {
     }
   }
 
-  return <OnboardingForm onSubmit={handleFormSubmit} />
+  return (
+    <div className="flex flex-col min-h-screen">
+      <div className="flex-1">
+        <OnboardingForm onSubmit={handleFormSubmit} />
+      </div>
+      <Footer />
+    </div>
+  )
 }

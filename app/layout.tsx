@@ -1,12 +1,29 @@
 import type React from "react"
-import type { Metadata } from "next"
-import { GeistSans } from "geist/font/sans"
-import { GeistMono } from "geist/font/mono"
+import type { Metadata, Viewport } from "next"
+import { Poppins, DM_Sans } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 
 import "./globals.css"
 import AppBar from "@/components/lenders/AppBar"
 import { Toaster } from "@/components/ui/sonner"
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-poppins",
+})
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-dm-sans",
+})
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+}
 
 export const metadata: Metadata = {
   title: "Dr. Finwise - AI Financial Advisor",
@@ -21,7 +38,7 @@ export default function RootLayout ( {
 }> ) {
   return (
     <html lang="en">
-      <body className={`font-sans ${ GeistSans.variable } ${ GeistMono.variable }`}>
+      <body className={`font-sans ${poppins.variable} ${dmSans.variable}`}>
         <AppBar />
         <main>
           {children}

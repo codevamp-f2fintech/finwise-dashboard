@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation"
 import { type CustomerInfo } from "@/components/lenders/onboarding-form"
 import { LoadingTransition } from "@/components/lenders/loading-transition"
 import { LoanDashboard } from "@/components/lenders/loan-dashboard"
-import { type Lender } from "@/components/lenders/mock-lenders"
+import { type Lender, mockLenders } from "@/components/lenders/mock-lenders"
 
-type AppState = "loading" | "dashboard"
+type AppState = "initializing" | "loading" | "dashboard"
 
 // Map eligibility response to Lender format for dashboard display
 interface EligibilityLender {
@@ -48,23 +48,35 @@ function mapEligibilityToLender(el: EligibilityLender, rank: number): Lender {
     lenderStatus = "partial"
   }
 
+  // Find corresponding mock lender to enrich data
+  const mockLender = mockLenders.find(m =>
+    m.id === el.lender_id ||
+    m.name.toLowerCase() === el.lender.toLowerCase() ||
+    m.id.toLowerCase().includes(el.lender_id.toLowerCase())
+  )
+
+  // FAIL lenders are not mapped — they are filtered out before calling this
+
   return {
     id: el.lender_id,
-    name: el.lender,
-    productType: el.product === "OD" ? "Overdraft" : "Term Loan",
+    name: mockLender?.name || el.lender,
+    productType: mockLender?.productType || (el.product === "OD" ? "Overdraft" : "Term Loan"),
     indicativeLimit: `₹${(limit / 100000).toFixed(1)}L`,
     finalLimit: `₹${(limit / 100000).toFixed(1)}L`,
-    roiRange: `${el.pricing.roi}%`,
-    processingFee: el.pricing.processing_fee_pct > 0
+    roiRange: mockLender?.roiRange || `${el.pricing.roi}%`,
+    processingFee: mockLender?.processingFee || (el.pricing.processing_fee_pct > 0
       ? `${el.pricing.processing_fee_pct}%`
-      : "Nil",
-    tenure: `${el.structure.tenure_months} months`,
-    disbursalTime: "3-7 days",
-    pros: el.explain.why_matched,
-    cons: el.explain.how_to_increase_limit,
+      : "Nil"),
+    tenure: mockLender?.tenure || `${el.structure.tenure_months} months`,
+    disbursalTime: mockLender?.disbursalTime || "3-7 days",
+    pros: el.explain.why_matched.length > 0 ? el.explain.why_matched : (mockLender?.pros || []),
+    cons: el.explain.how_to_increase_limit.length > 0 ? el.explain.how_to_increase_limit : (mockLender?.cons || []),
     status: lenderStatus,
     rank: rank,
-    eligibility: {
+    totalCharges: mockLender?.totalCharges,
+    docsRequired: mockLender?.docsRequired,
+    eligibilityCriteria: mockLender?.eligibilityCriteria,
+    eligibility: mockLender?.eligibility || {
       employmentTypes: ["SelfEmployed", "Salaried"],
       minIncome: 0,
       maxLoanAmount: limit,
@@ -74,7 +86,7 @@ function mapEligibilityToLender(el: EligibilityLender, rank: number): Lender {
 
 export default function LendersPage() {
   const router = useRouter()
-  const [appState, setAppState] = useState<AppState>("loading")
+  const [appState, setAppState] = useState<AppState>("initializing")
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo | null>(null)
   const [filteredLenders, setFilteredLenders] = useState<Lender[]>([])
   const [searchError, setSearchError] = useState<string | null>(null)
@@ -94,6 +106,36 @@ export default function LendersPage() {
 
       const data: CustomerInfo = JSON.parse(storedData)
       setCustomerInfo(data)
+
+      // Check cache to avoid re-loading on "Back" navigation
+      const cachedResultStr = sessionStorage.getItem("lendersResult")
+      const cachedInfoStr = sessionStorage.getItem("lendersResultInfo")
+
+      let isBackNavigation = false
+      if (typeof performance !== "undefined") {
+        const navEntries = performance.getEntriesByType("navigation")
+        if (navEntries.length > 0) {
+          const navTiming = navEntries[0] as PerformanceNavigationTiming
+          isBackNavigation = (navTiming.type === "back_forward")
+        }
+      }
+
+      if (isBackNavigation && cachedResultStr && cachedInfoStr === storedData) {
+        try {
+          const cachedResult = JSON.parse(cachedResultStr)
+          if (cachedResult.filteredLenders && cachedResult.eligibilityResponse) {
+            setFilteredLenders(cachedResult.filteredLenders)
+            setEligibilityResponse(cachedResult.eligibilityResponse)
+            setLendersLoaded(true)
+            setAppState("dashboard") // Skip loading transition entirely
+            return
+          }
+        } catch (e) {
+          console.error("Cache read error", e)
+        }
+      }
+
+      setAppState("loading")
 
       try {
         // Call the new eligibility API (Phase 1 - Soft Eligibility)
@@ -133,11 +175,38 @@ export default function LendersPage() {
           console.log("[LendersPage] Eligibility check:", result.status, "with", result.lenders.length, "lenders")
           setEligibilityResponse(result)
 
+          // Filter out FAIL lenders — only show eligible (PASS) and partial (PARTIAL) lenders
+          const visibleLenders = result.lenders.filter(
+            (el: EligibilityLender) =>
+              el.eligibility.status === "PASS" ||
+              el.eligibility.status === "SOFT_PASS" ||
+              el.eligibility.status === "PARTIAL" ||
+              el.eligibility.status === "SOFT_PARTIAL"
+          )
+
+          console.log(
+            `[LendersPage] Showing ${visibleLenders.length} lenders ` +
+            `(${result.lenders.length - visibleLenders.length} ineligible hidden)`
+          )
+
           // Map eligibility results to Lender format
-          const mappedLenders = result.lenders.map((el: EligibilityLender, idx: number) =>
+          const mappedLenders = visibleLenders.map((el: EligibilityLender, idx: number) =>
             mapEligibilityToLender(el, idx + 1)
           )
-          setFilteredLenders(mappedLenders)
+
+          // Append partial lenders from mock data if they are not already in the mapped list
+          const existingIds = new Set(mappedLenders.map(l => l.id))
+          const partialMockLenders = mockLenders.filter(m => m.status === "partial" && !existingIds.has(m.id))
+            .map((m, idx) => ({ ...m, rank: mappedLenders.length + idx + 1 }))
+
+          const finalLenders = [...mappedLenders, ...partialMockLenders]
+          setFilteredLenders(finalLenders)
+
+          sessionStorage.setItem("lendersResultInfo", storedData)
+          sessionStorage.setItem("lendersResult", JSON.stringify({
+            filteredLenders: finalLenders,
+            eligibilityResponse: result
+          }))
         } else {
           console.error("[LendersPage] Eligibility error:", result.error)
           setSearchError(result.error || "Eligibility check failed")
@@ -156,6 +225,10 @@ export default function LendersPage() {
 
   const handleLoadingComplete = () => {
     setAppState("dashboard")
+  }
+
+  if (appState === "initializing") {
+    return <div className="min-h-screen bg-gradient-to-br from-[#c4d5eb] to-[#e8eff9]" />
   }
 
   if (!customerInfo || appState === "loading") {

@@ -4,7 +4,8 @@ export async function POST(request: Request) {
     try {
         const formData = await request.formData();
 
-        const response = await fetch("https://web.f2fintech.in/api/v1/upload-to-s3", {
+        const backendUrl = process.env.BACKEND_URL || "https://web.f2fintech.in/api/v1";
+        const response = await fetch(`${backendUrl}/upload-to-s3`, {
             method: "POST",
             // Do NOT set Content-Type header manually here when forwarding FormData
             // fetch will automatically set the correct boundary 

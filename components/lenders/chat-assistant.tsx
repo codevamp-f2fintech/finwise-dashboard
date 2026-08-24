@@ -1,15 +1,14 @@
 "use client"
 
-import { Badge } from "@/components/ui/badge"
 import { useState, useRef, useEffect } from "react"
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Send, Bot, Sparkles, Upload, MoreVertical, ChevronUp, ChevronDown, Loader2 } from "lucide-react"
+import { Send, Bot, Sparkles, ChevronUp, ChevronDown, Loader2, Trash2, X } from "lucide-react"
 import ReactMarkdown from "react-markdown"
 import { cn } from "@/lib/utils"
-import { PDFUpload } from "./pdf-upload"
+
 import { ragStore } from "@/lib/rag-store"
 import type { CustomerInfo } from "./onboarding-form"
 import type { Lender } from "./mock-lenders"
@@ -30,6 +29,7 @@ interface ChatAssistantProps {
   onLenderSelection?: (lenderIds: string[], reasoning: any) => void
   onSelectionStart?: () => void
   onSelectionEnd?: () => void
+  onClose?: () => void
 }
 
 const knowledgeChips = [
@@ -76,19 +76,20 @@ const SELECTION_PATTERNS = [
   /only\s+(\d+|one)\s+(best|top)/i,
 ]
 
-export function ChatAssistant({ stage, customerInfo, lenders, onLenderSelection, onSelectionStart, onSelectionEnd }: ChatAssistantProps) {
-  const [messages, setMessages] = useState<Message[]>([
+export function ChatAssistant({ stage, customerInfo, lenders, onLenderSelection, onSelectionStart, onSelectionEnd, onClose }: ChatAssistantProps) {
+  const initialMessages: Message[] = [
     {
       id: "1",
       role: "assistant",
       content: "Hello! I'm Dr. Finwise, your financial advisor. I can help you understand loan eligibility, compare lenders, and answer questions about fees, timelines, and documentation. How can I assist you today?",
       timestamp: new Date(),
     },
-  ])
+  ]
+  const [messages, setMessages] = useState<Message[]>(initialMessages)
   const [input, setInput] = useState("")
   const [isTyping, setIsTyping] = useState(false)
   const [isSelecting, setIsSelecting] = useState(false)
-  const [showPDFUpload, setShowPDFUpload] = useState(false)
+
   const [ragReady, setRagReady] = useState(false)
   const [showQuickTopics, setShowQuickTopics] = useState(true)
   const [firstInteractionDone, setFirstInteractionDone] = useState(false)
@@ -96,7 +97,12 @@ export function ChatAssistant({ stage, customerInfo, lenders, onLenderSelection,
   const endRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: "smooth", block: "end" })
+    if (scrollRef.current) {
+      scrollRef.current.scrollTo({
+        top: scrollRef.current.scrollHeight,
+        behavior: "smooth",
+      })
+    }
   }, [messages, isTyping])
 
   useEffect(() => {
@@ -318,175 +324,162 @@ export function ChatAssistant({ stage, customerInfo, lenders, onLenderSelection,
     setInput(chip)
   }
 
-  const handlePDFUploadComplete = () => {
-    setShowPDFUpload(false)
-    setRagReady(true)
+  const handleClearChat = () => {
+    setMessages(initialMessages)
+    setFirstInteractionDone(false)
+    setInput("")
   }
+
+
 
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true })
   }
 
   return (
-    <div className="space-y-3 flex flex-col h-full min-h-0">
-      {showPDFUpload && (
-        <div className="px-4">
-          <PDFUpload onUploadComplete={handlePDFUploadComplete} />
-        </div>
-      )}
-
-      <Card className="bg-[#f0f2f5] border-0 shadow-xl rounded-lg flex flex-col overflow-hidden h-full py-0 max-h-[calc(100vh-100px)]">
-        {/* WhatsApp-like Header */}
-        <CardHeader className="bg-[#008069] text-white p-4 border-b border-[#008069] shrink-0">
+    <div className="space-y-3 flex flex-col h-full min-h-0 animate-in fade-in zoom-in-95 duration-500">
+      <Card className="bg-white border-0 shadow-lg rounded-2xl flex flex-col overflow-hidden h-full py-0 max-h-full ring-1 ring-black/5">
+        {/* Header */}
+        <CardHeader className="bg-gradient-to-r from-[#3f50b5] to-[#5c6bc0] text-white p-3.5 sm:p-4 shrink-0">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="flex h-9 w-10 items-center justify-center rounded-full bg-white/20">
-                <Bot className="h-5 w-5 text-white" />
+            <div className="flex items-center gap-2.5 sm:gap-3">
+              <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm shadow-inner shrink-0">
+                <Bot className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
               </div>
-              <div>
-                <CardTitle className="text-white text-lg">Dr. Finwise</CardTitle>
-                <CardDescription className="text-white/80 text-sm">
-                  AI Financial Advisor {ragReady && "• RAG Enabled"}
+              <div className="min-w-0">
+                <CardTitle className="text-white text-base sm:text-lg font-bold tracking-tight truncate">Dr. Finwise</CardTitle>
+                <CardDescription className="text-white/80 text-[11px] sm:text-xs font-medium flex items-center gap-1">
+                  AI Financial Advisor {ragReady && <span className="flex items-center gap-1"> <Sparkles className="h-3 w-3 text-yellow-300" /> RAG</span>}
                 </CardDescription>
               </div>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 shrink-0">
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => setShowPDFUpload(!showPDFUpload)}
-                className="text-white hover:bg-white/20 rounded-full h-10 w-10"
+                onClick={handleClearChat}
+                className="text-white hover:bg-white/20 rounded-full h-8 w-8 sm:h-9 sm:w-9 transition-colors"
+                title="Clear Chat"
               >
-                <Upload className="h-5 w-5" />
+                <Trash2 className="h-4 w-4" />
               </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-white hover:bg-white/20 rounded-full h-10 w-10"
-              >
-                <MoreVertical className="h-5 w-5" />
-              </Button>
+              {onClose && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={onClose}
+                  className="text-white hover:bg-white/20 rounded-full h-8 w-8 sm:h-9 sm:w-9 transition-colors"
+                  title="Close Chat"
+                >
+                  <X className="h-5 w-5" />
+                </Button>
+              )}
             </div>
           </div>
         </CardHeader>
 
-        <CardContent className="flex flex-col flex-1 p-0 bg-[#efeae2] bg-opacity-60 bg-chat-background min-h-0">
+        <CardContent className="flex flex-col flex-1 p-0 bg-transparent min-h-0 relative">
           {/* Messages Area */}
-          <div className="flex-1 min-h-0 flex flex-col">
-            <ScrollArea className="flex-1 px-4 py-4 min-h-0">
-              <div className="space-y-4">
-                {messages.map(message => (
-                  <div
-                    key={message.id}
-                    className={cn(
-                      "flex gap-3 max-w-full",
-                      message.role === "user" ? "justify-end" : "justify-start"
-                    )}
-                  >
-                    <div
-                      className={cn(
-                        "max-w-[90%] lg:max-w-[80%] xl:max-w-[75%] rounded-2xl px-4 py-3 relative",
-                        message.role === "user"
-                          ? "bg-[#d9fdd3] rounded-br-none"
-                          : message.isSystemMessage
-                            ? "bg-yellow-100 border border-yellow-300 rounded-bl-none"
-                            : "bg-white rounded-bl-none"
-                      )}
-                    >
-                      <div className="text-base leading-relaxed text-gray-800 whitespace-pre-wrap break-words">
-                        <ReactMarkdown>{message.content}</ReactMarkdown>
-                      </div>
-
-                      <div className="flex justify-end items-center gap-1 mt-2">
-                        {message.fromKnowledgeBase && (
-                          <span className="text-[10px] text-blue-600 bg-blue-100 px-1.5 py-0.5 rounded">
-                            KB
-                          </span>
-                        )}
-                        <span className="text-xs text-gray-500">{formatTime(message.timestamp)}</span>
-                      </div>
-
-                      <div
-                        className={cn(
-                          "absolute bottom-0 w-3 h-4",
-                          message.role === "user"
-                            ? "right-0 -mr-3 bg-[#d9fdd3] clip-path-[polygon(100% 0, 0 0, 100% 100%)]"
-                            : message.isSystemMessage
-                              ? "left-0 -ml-3 bg-yellow-100 clip-path-[polygon(0 0, 100% 0, 0 100%)]"
-                              : "left-0 -ml-3 bg-white clip-path-[polygon(0 0, 100% 0, 0 100%)]"
-                        )}
-                      />
-                    </div>
-                  </div>
-                ))}
-
-                {(isTyping || isSelecting) && (
-                  <div className="flex gap-3 justify-start">
-                    <div className="bg-white rounded-bl-none rounded-2xl px-4 py-3 max-w-[80%]">
-                      <div className="flex items-center gap-2">
-                        {isSelecting ? (
-                          <Loader2 className="h-4 w-4 animate-spin text-[#008069]" />
-                        ) : (
-                          <div className="flex space-x-1">
-                            <div className="h-2 w-2 animate-bounce rounded-full bg-gray-400 [animation-delay:-0.3s]" />
-                            <div className="h-2 w-2 animate-bounce rounded-full bg-gray-400 [animation-delay:-0.15s]" />
-                            <div className="h-2 w-2 animate-bounce rounded-full bg-gray-400" />
-                          </div>
-                        )}
-                        <span className="text-sm text-gray-500">
-                          {isSelecting ? "Analyzing lenders..." : "Thinking"}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
+          <div ref={scrollRef} className="flex-1 overflow-y-auto px-3 sm:px-4 py-4 sm:py-6 space-y-4 sm:space-y-5 scroll-smooth">
+            {messages.map(message => (
+              <div
+                key={message.id}
+                className={cn(
+                  "flex gap-2.5 sm:gap-3 max-w-full animate-in slide-in-from-bottom-2 duration-300",
+                  message.role === "user" ? "justify-end" : "justify-start"
                 )}
-                <div ref={endRef} />
+              >
+                <div
+                  className={cn(
+                    "max-w-[88%] sm:max-w-[85%] rounded-2xl px-4 py-3 sm:px-5 sm:py-3.5 shadow-sm relative transition-all duration-300 hover:shadow-md",
+                    message.role === "user"
+                      ? "bg-gradient-to-r from-[#3f50b5] to-[#5c6bc0] text-white rounded-br-sm"
+                      : message.isSystemMessage
+                        ? "bg-yellow-50 border border-yellow-200/50 text-yellow-900 rounded-bl-sm"
+                        : "bg-gray-50 border border-gray-100 text-gray-800 rounded-bl-sm"
+                  )}
+                >
+                  <div className="text-xs sm:text-[14px] leading-relaxed whitespace-pre-wrap break-words prose prose-sm max-w-none dark:prose-invert">
+                    <ReactMarkdown>
+                      {message.content}
+                    </ReactMarkdown>
+                  </div>
+
+                  <div className={cn("flex justify-end items-center gap-1.5 sm:gap-2 mt-1.5 sm:mt-2", message.role === "user" ? "text-indigo-100" : "text-gray-400")}>
+                    {message.fromKnowledgeBase && (
+                      <span className="text-[9px] sm:text-[10px] text-[#3f50b5] bg-indigo-100/50 px-1.5 py-0.5 rounded-full font-medium">
+                        KB
+                      </span>
+                    )}
+                    <span className="text-[9px] sm:text-[10px] font-medium">{formatTime(message.timestamp)}</span>
+                  </div>
+                </div>
               </div>
-            </ScrollArea>
+            ))}
+
+            {(isTyping || isSelecting) && (
+              <div className="flex gap-2.5 sm:gap-3 justify-start animate-in fade-in duration-300">
+                <div className="bg-gray-50 border border-gray-100 rounded-bl-sm rounded-2xl px-4 py-3 sm:px-5 sm:py-4 shadow-sm max-w-[85%] sm:max-w-[80%]">
+                  <div className="flex items-center gap-2.5 sm:gap-3">
+                    {isSelecting ? (
+                      <Loader2 className="h-4 w-4 sm:h-5 sm:w-5 animate-spin text-[#3f50b5]" />
+                    ) : (
+                      <div className="flex space-x-1.5">
+                        <div className="h-1.5 w-1.5 sm:h-2 sm:w-2 animate-bounce rounded-full bg-[#5c6bc0] [animation-delay:-0.3s]" />
+                        <div className="h-1.5 w-1.5 sm:h-2 sm:w-2 animate-bounce rounded-full bg-[#5c6bc0] [animation-delay:-0.15s]" />
+                        <div className="h-1.5 w-1.5 sm:h-2 sm:w-2 animate-bounce rounded-full bg-[#5c6bc0]" />
+                      </div>
+                    )}
+                    <span className="text-xs sm:text-sm text-gray-500 font-medium">
+                      {isSelecting ? "Analyzing lenders..." : "Thinking"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
+            <div ref={endRef} className="h-2" />
           </div>
 
           {/* Quick Topics Toggle Section */}
-          {(showQuickTopics || !firstInteractionDone) && (
-            <div className="border-t border-gray-300 bg-white p-3 transition-all duration-300 ease-in-out">
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-2">
-                  <Sparkles className="h-4 w-4 text-[#008069]" />
-                  <span className="text-sm text-gray-600 font-medium">Quick Topics</span>
-                </div>
-
-                <button
-                  onClick={() => setShowQuickTopics(!showQuickTopics)}
-                  className="p-1 rounded-full hover:bg-gray-200 transition"
-                  aria-label="Toggle Quick Topics"
-                >
-                  {showQuickTopics ? (
-                    <ChevronUp className="h-4 w-4 text-gray-600" />
-                  ) : (
-                    <ChevronDown className="h-4 w-4 text-gray-600" />
-                  )}
-                </button>
+          <div className="border-t border-gray-100 bg-white p-2.5 sm:p-3 transition-all duration-300 ease-in-out shrink-0">
+            <div className="flex items-center justify-between mb-2 sm:mb-3">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <Sparkles className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#3f50b5]" />
+                <span className="text-[11px] sm:text-xs text-gray-700 font-semibold uppercase tracking-wider">Suggested Topics</span>
               </div>
 
-              {showQuickTopics && (
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                  {knowledgeChips.map(chip => (
-                    <button
-                      key={chip}
-                      onClick={() => handleChipClick(chip)}
-                      className="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs px-2 py-2 rounded-full transition-colors duration-200 border border-gray-300 break-words min-h-[2rem] flex items-center justify-center text-center leading-tight"
-                    >
-                      <span className="break-words whitespace-normal">{chip}</span>
-                    </button>
-                  ))}
-                </div>
-              )}
+              <button
+                onClick={() => setShowQuickTopics(!showQuickTopics)}
+                className="p-1 sm:p-1.5 rounded-full hover:bg-gray-100 transition-colors shadow-sm"
+                aria-label="Toggle Quick Topics"
+              >
+                {showQuickTopics ? (
+                  <ChevronDown className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-gray-600" />
+                ) : (
+                  <ChevronUp className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-gray-600" />
+                )}
+              </button>
             </div>
-          )}
+
+            {showQuickTopics && (
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 sm:gap-2">
+                {knowledgeChips.map(chip => (
+                  <button
+                    key={chip}
+                    onClick={() => handleChipClick(chip)}
+                    className="bg-gray-50 hover:bg-gray-100 text-gray-700 text-[11px] sm:text-xs px-2.5 py-2 sm:py-2.5 rounded-xl transition-all duration-200 border border-gray-200 shadow-sm hover:shadow hover:-translate-y-0.5 break-words min-h-[2.25rem] sm:min-h-[2.5rem] flex items-center justify-center text-center leading-tight font-medium"
+                  >
+                    <span className="break-words whitespace-normal">{chip}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
 
           {/* Input Area */}
-          <div className="bg-gray-100 p-3 border-t border-gray-300 shrink-0">
-            <div className="flex items-center gap-2">
-              <div className="flex-1 min-w-0">
+          <div className="bg-white p-2.5 sm:p-3 border-t border-gray-100 shrink-0">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="flex-1 min-w-0 relative">
                 <Input
                   value={input}
                   onChange={e => setInput(e.target.value)}
@@ -496,30 +489,23 @@ export function ChatAssistant({ stage, customerInfo, lenders, onLenderSelection,
                       handleSend()
                     }
                   }}
-                  placeholder="Type a message"
+                  placeholder="Type your message..."
                   disabled={isSelecting}
-                  className="bg-white border-0 rounded-full px-4 py-3 text-sm focus:ring-1 focus:ring-[#008069] focus:border-[#008069] w-full"
+                  className="bg-gray-50 border-gray-200 shadow-inner rounded-full pl-4 sm:pl-5 pr-3 sm:pr-4 py-4 sm:py-5 text-xs sm:text-sm focus-visible:ring-2 focus-visible:ring-[#3f50b5] focus-visible:border-transparent w-full transition-all"
                 />
               </div>
 
               <Button
                 onClick={handleSend}
                 disabled={!input.trim() || isTyping || isSelecting}
-                className="bg-[#008069] hover:bg-[#006e58] text-white rounded-full h-10 w-10 transition-colors duration-200 shrink-0"
-                size="icon"
+                className="bg-gradient-to-r from-[#3f50b5] to-[#5c6bc0] hover:from-[#354497] hover:to-[#4a58a5] text-white rounded-full h-10 w-10 sm:h-11 sm:w-11 transition-all duration-300 shadow-md hover:shadow-lg shrink-0 flex items-center justify-center p-0"
               >
-                <Send className="h-5 w-5" />
+                <Send className="h-4 w-4 sm:h-5 sm:w-5 ml-0.5 sm:ml-1" />
               </Button>
             </div>
           </div>
         </CardContent>
       </Card>
-
-      <style jsx>{`
-        .bg-chat-background {
-          background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%2390c8c8' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
-        }
-      `}</style>
     </div>
   )
 }
