@@ -5,7 +5,7 @@ import { IoLogoYoutube, IoLogoWhatsapp } from "react-icons/io"
 import { AiFillInstagram } from "react-icons/ai"
 import LinkedInIcon from "@mui/icons-material/LinkedIn"
 
-const BASE_URL = "https://f2fintech.com/"
+const BASE_URL = (process.env.NEXT_PUBLIC_BASE_URL || "https://f2fintech.com").replace(/\/$/, "")
 
 const companyLinks = [
   { name: "About us", href: `${BASE_URL}/about-us` },

@@ -117,7 +117,7 @@ export function LoanDashboard({
     setShowConsentModal(false);
     console.log("[Dashboard] User consented, redirecting to application form");
 
-    const baseUrl = "http://localhost:5173/application-form";
+    const baseUrl = `${process.env.NEXT_PUBLIC_BASE_URL || "https://f2fintech.com"}/application-form`;
     const params = new URLSearchParams();
 
     if (selectedLender) {
@@ -716,7 +716,8 @@ export function LoanDashboard({
                                   };
 
                                   const slug = bankSlugMap[lender.id] || `${lender.name.toLowerCase().replace(/\s+/g, '-')}${suffix}`;
-                                  window.location.href = `http://localhost:5173/${loanType}/${slug}`;
+                                  const mainUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://f2fintech.com";
+                                  window.location.href = `${mainUrl}/${loanType}/${slug}`;
                                 }}
                                 variant="outline"
                                 className="flex-1 gap-2 border-2 border-[#3f50b5] text-[#3f50b5] hover:bg-[#f0f4ff] hover:text-[#354497] transition-all duration-300 rounded-xl py-2 sm:py-2.5 text-sm font-semibold h-auto"

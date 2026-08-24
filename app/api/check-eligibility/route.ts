@@ -243,7 +243,7 @@ export async function POST(request: NextRequest) {
           console.warn('[check-eligibility] ⚠ SPECULATIVE FLOWS DETECTED — L&T will be blocked')
         }
 
-        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
+        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://f2fintech.com'
         const eligibilityResponse = await fetch(`${baseUrl}/api/eligibility`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
