@@ -24,6 +24,7 @@ import {
   Divider,
   ListItemText,
   Tooltip,
+  keyframes,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
@@ -32,7 +33,6 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import CircleIcon from "@mui/icons-material/Circle";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import { keyframes } from "@mui/system";
 import LogoutIcon from "@mui/icons-material/Logout";
 
 import { pages, products } from "../../lib/Data";
