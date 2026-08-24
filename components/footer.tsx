@@ -84,9 +84,10 @@ export function Footer() {
                 className="text-white/95 text-sm sm:text-[0.95rem] leading-relaxed m-0"
                 style={{ fontFamily: fp }}
               >
-                F2 Fintech Pvt Ltd, A-25, M-1 Arv Park,<br />
-                A-Block, Sector 63, Noida<br />
-                +91 8810600135 , +91 8860600555
+                Office 201, Second floor, C-127,<br />
+                AGS Park, C Block, Sector 63,<br />
+                Noida, Uttar Pradesh 201301<br />
+                <span className="whitespace-nowrap inline-block">+91 8810600135, +91 8860600555</span>
               </p>
             </div>
 
@@ -178,7 +179,7 @@ export function Footer() {
                   <a href="https://www.youtube.com/channel/UCMyV4yKd27_Vx3Sq2FSDN5A" target="_blank" rel="noopener noreferrer" aria-label="Follow us on YouTube" className="f-icon flex items-center">
                     <IoLogoYoutube size={24} />
                   </a>
-                  <a href="https://www.instagram.com/f2fintech/" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Instagram" className="f-icon flex items-center">
+                  <a href="https://www.instagram.com/f2fintech_official?utm_source=ig_web_button_share_sheet&igsi=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Instagram" className="f-icon flex items-center">
                     <AiFillInstagram size={24} />
                   </a>
                   <a href="https://www.linkedin.com/company/f2fintech" target="_blank" rel="noopener noreferrer" aria-label="Follow us on LinkedIn" className="f-icon flex items-center">
