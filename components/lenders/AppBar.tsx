@@ -24,7 +24,6 @@ import {
   Divider,
   ListItemText,
   Tooltip,
-  keyframes,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
@@ -332,34 +331,12 @@ export default function ResponsiveAppBar() {
     justifyContent: "flex-end",
   }));
 
-  const marqueeScroll = keyframes`
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  `;
-
-  const MarqueeItem = () => (
-    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, px: 4, whiteSpace: 'nowrap' }}>
-      <Typography sx={{ color: '#fff', fontSize: { xs: '0.65rem', md: '0.8rem' }, fontWeight: 500, fontFamily: 'Poppins', whiteSpace: 'nowrap' }}>
-        As seen On
-      </Typography>
-      <Typography sx={{ color: '#00d2ff', fontSize: { xs: '0.65rem', md: '0.8rem' }, fontWeight: 700, fontFamily: 'Poppins', whiteSpace: 'nowrap' }}>
-        SHARK TANK
-      </Typography>
-      <Typography sx={{ color: '#ffcc00', fontSize: { xs: '0.65rem', md: '0.8rem' }, fontWeight: 700, fontFamily: 'Poppins', whiteSpace: 'nowrap' }}>
-        INDIA
-      </Typography>
-      <Typography sx={{ color: '#fff', fontSize: { xs: '0.65rem', md: '0.8rem' }, fontWeight: 500, fontFamily: 'Poppins', whiteSpace: 'nowrap' }}>
-        Season - 05
-      </Typography>
-    </Box>
-  );
 
   const theme = useTheme();
   const isIpadPro = useMediaQuery(
     "only screen and (min-device-width: 1024px) and (max-device-width: 1366px) and (-webkit-min-device-pixel-ratio: 2)"
   );
 
-  const isHomePage = pathname === "/" || pathname === "";
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setMounted(true);
@@ -417,35 +394,6 @@ export default function ResponsiveAppBar() {
 
   return (
     <>
-      {/* SHARK TANK MARQUEE - visible only on home page */}
-      {isHomePage && (
-        <Box
-          sx={{
-            width: "100%",
-            backgroundColor: "#204ed8",
-            overflow: "hidden",
-            py: .4,
-            borderBottom: "1px solid rgba(255,255,255,0.1)",
-            display: 'flex',
-            position: 'relative'
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              width: "max-content",
-              animation: `${marqueeScroll} 30s linear infinite`,
-              "&:hover": {
-                animationPlayState: "paused",
-              },
-            }}
-          >
-            {[...Array(10)].map((_, i) => (
-              <MarqueeItem key={i} />
-            ))}
-          </Box>
-        </Box>
-      )}
 
       <Box component="nav" role="navigation" sx={{ display: "flex", height: { xs: "60px", sm: "70px", md: "80px" } }}>
         <Box
@@ -567,6 +515,21 @@ export default function ResponsiveAppBar() {
                 ))}
               </List>
             )}
+
+            <Divider sx={{ my: 0.5, borderColor: "rgba(0,0,0,0.06)" }} />
+            <Button
+              href={getWebUrl("/cards")}
+              sx={{
+                height: "40px",
+                textTransform: "none",
+                color: "#000",
+                fontSize: isIpadPro ? "1.2rem" : { xs: "0.95rem", sm: "1.1rem" },
+                fontFamily: "Poppins",
+                justifyContent: "flex-start",
+              }}
+            >
+              Cards
+            </Button>
 
             <Divider sx={{ my: 0.5, borderColor: "rgba(0,0,0,0.06)" }} />
             <Button
@@ -1034,6 +997,19 @@ export default function ResponsiveAppBar() {
                 })}
               </Menu>
             )}
+
+            <NavDivider />
+
+            {/* Cards button */}
+            <Button
+              component={Link}
+              href={getWebUrl("/cards")}
+              onClick={topFunction}
+              disableRipple
+              sx={navButtonSx}
+            >
+              Cards
+            </Button>
 
             <NavDivider />
 
