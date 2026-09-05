@@ -72,7 +72,7 @@ export default function ResponsiveAppBar() {
   const [notifications, setNotifications] = useState([]);
   const [visibleNotificationsCount, setVisibleNotificationsCount] = useState(5);
   const navigate = useRouter();
-  const isMobile = useMediaQuery("(max-width: 1024px)");
+  const isMobile = useMediaQuery("(max-width: 1199px)");
   // Detect touch-primary devices (iPad Pro, tablets, mobiles).
   // Only (pointer: coarse) is used - desktop browsers expose maxTouchPoints > 0
   // even on non-touch hardware, which would falsely trigger click-mode on desktop.
@@ -347,16 +347,18 @@ export default function ResponsiveAppBar() {
   }
 
   const navButtonSx = {
-    fontSize: { md: "0.75rem", lg: "0.82rem", xl: "0.88rem" },
+    fontSize: { lg: "0.74rem", xl: "0.82rem", "2xl": "0.88rem" },
     minWidth: "auto",
     color: "#1e293b",
-    fontFamily: "Poppins",
+    fontFamily: "Poppins, sans-serif",
     fontWeight: 500,
     textTransform: "none",
-    px: { md: "5px", lg: "7px", xl: "10px" },
+    px: { lg: "4.5px", xl: "7.5px" },
     py: "4px",
     borderRadius: "6px",
     backgroundColor: "transparent",
+    whiteSpace: "nowrap",
+    flexShrink: 0,
     transition: "all 200ms ease-in-out",
     "&:hover": {
       backgroundColor: "rgba(32, 78, 216, 0.08) !important",
@@ -382,9 +384,9 @@ export default function ResponsiveAppBar() {
       component="span"
       sx={{
         width: "1px",
-        height: "14px",
-        backgroundColor: "rgba(0, 0, 0, 0.16)",
-        mx: { md: "1px", lg: "2px", xl: "4px" },
+        height: "13px",
+        backgroundColor: "rgba(0, 0, 0, 0.14)",
+        mx: { lg: "1px", xl: "3px" },
         flexShrink: 0,
         display: "inline-block",
         alignSelf: "center",
@@ -395,42 +397,56 @@ export default function ResponsiveAppBar() {
   return (
     <>
 
-      <Box component="nav" role="navigation" sx={{ display: "flex", height: { xs: "60px", sm: "70px", md: "80px" } }}>
+      <Box
+        component="nav"
+        role="navigation"
+        sx={{
+          display: "flex",
+          height: { xs: "60px", sm: "68px", md: "74px", lg: "78px" },
+          width: "100%",
+          position: "relative",
+          zIndex: 1100,
+          backgroundColor: "#eaf4f4",
+        }}
+      >
         <Box
           sx={{
             display: "flex",
             alignItems: "center",
+            justifyContent: "space-between",
             width: "100%",
+            height: "100%",
             backgroundColor: "#eaf4f4",
             color: theme.palette.primary.main,
-            px: { xs: 1, sm: 2 },
+            px: { xs: 1.5, sm: 2, lg: 2, xl: 3 },
+            boxSizing: "border-box",
           }}
         >
           {/* LOGO */}
           <Box
             sx={{
               display: "flex",
-              justifyContent: "flex-start",
+              alignItems: "center",
               flexShrink: 0,
+              mr: { xs: 1, lg: 1.5, xl: 2 },
             }}
           >
-            <Toolbar
-              sx={{
-                display: "flex",
-              }}
+            <Link
+              href={getWebUrl("/")}
+              style={{ display: "flex", alignItems: "center", textDecoration: "none" }}
             >
-              <Link href={getWebUrl("/")}>
-                <img
-                  src="/f2Fintechlogo-old.png"
-                  alt="Logo"
-                  style={{
-                    height: isIpadPro ? "60px" : isMobile ? "60px" : "90px",
-                    width: "auto",
-                    objectFit: "contain",
-                  }}
-                />
-              </Link>
-            </Toolbar>
+              <img
+                src="/f2Fintechlogo-old.png"
+                alt="Logo"
+                style={{
+                  height: "auto",
+                  maxHeight: isMobile ? "44px" : isIpadPro ? "48px" : "54px",
+                  width: "auto",
+                  objectFit: "contain",
+                  display: "block",
+                }}
+              />
+            </Link>
           </Box>
 
           {/* SHOW ON MOBILE  */}
@@ -668,6 +684,21 @@ export default function ResponsiveAppBar() {
 
             <Divider sx={{ my: 0.5, borderColor: "rgba(0,0,0,0.06)" }} />
             <Button
+              href={getWebUrl("/download-cibil")}
+              sx={{
+                height: "40px",
+                textTransform: "none",
+                color: "#000",
+                fontSize: isIpadPro ? "1.2rem" : { xs: "0.95rem", sm: "1.1rem" },
+                fontFamily: "Poppins",
+                justifyContent: "flex-start",
+              }}
+            >
+              CIBIL Report
+            </Button>
+
+            <Divider sx={{ my: 0.5, borderColor: "rgba(0,0,0,0.06)" }} />
+            <Button
               aria-controls={regulatoryAnchorEl ? "regulatory-menu-appbar" : undefined}
               aria-haspopup="true"
               onClick={regulatoryAnchorEl ? handleRegulatoryMenuClose : handleRegulatoryMenuOpen}
@@ -895,8 +926,8 @@ export default function ResponsiveAppBar() {
               display: { xs: "none", lg: "flex" },
               justifyContent: "flex-end",
               alignItems: "center",
-              marginRight: { md: "4px", lg: "16px" },
-              gap: { md: "1px", lg: "2px", xl: "4px" },
+              minWidth: 0,
+              gap: { lg: "1px", xl: "3px" },
               "& .MuiButton-root": {
                 whiteSpace: "nowrap",
               },
@@ -935,7 +966,7 @@ export default function ResponsiveAppBar() {
               onClick={isTouch ? (anchorEl ? handleMenuClose : handleMenuOpen) : handleMenuOpen}
               onMouseEnter={isTouch ? undefined : (e) => openMenu(setAnchorEl, e)}
               onMouseLeave={isTouch ? undefined : () => closeMenu(setAnchorEl)}
-              endIcon={<ArrowDropDownIcon sx={{ fontSize: "1.1rem !important", ml: "-2px" }} />}
+              endIcon={<ArrowDropDownIcon sx={{ fontSize: "1.05rem !important", ml: "-3px", mr: "-2px" }} />}
               disableRipple
               sx={navButtonSx}
             >
@@ -984,9 +1015,9 @@ export default function ResponsiveAppBar() {
                         <Typography
                           sx={{
                             color: "black",
-                            fontSize: isIpadPro ? "1.5vw" : "1vw",
-                            lineHeight: "2vw",
-                            fontFamily: "Poppins",
+                            fontSize: "0.875rem",
+                            lineHeight: 1.5,
+                            fontFamily: "Poppins, sans-serif",
                           }}
                         >
                           {product.title}
@@ -1020,7 +1051,7 @@ export default function ResponsiveAppBar() {
               onClick={isTouch ? (resourcesAnchorEl ? handleResourcesMenuClose : handleResourcesMenuOpen) : handleResourcesMenuOpen}
               onMouseEnter={isTouch ? undefined : (e) => openMenu(setResourcesAnchorEl, e)}
               onMouseLeave={isTouch ? undefined : () => closeMenu(setResourcesAnchorEl)}
-              endIcon={<ArrowDropDownIcon sx={{ fontSize: "1.1rem !important", ml: "-2px" }} />}
+              endIcon={<ArrowDropDownIcon sx={{ fontSize: "1.05rem !important", ml: "-3px", mr: "-2px" }} />}
               disableRipple
               sx={navButtonSx}
             >
@@ -1063,9 +1094,9 @@ export default function ResponsiveAppBar() {
                     <Typography
                       sx={{
                         color: "black",
-                        fontSize: isIpadPro ? "1.5vw" : "1vw",
-                        lineHeight: "2vw",
-                        fontFamily: "Poppins",
+                        fontSize: "0.875rem",
+                        lineHeight: 1.5,
+                        fontFamily: "Poppins, sans-serif",
                       }}
                     >
                       Blogs
@@ -1086,9 +1117,9 @@ export default function ResponsiveAppBar() {
                     <Typography
                       sx={{
                         color: "black",
-                        fontSize: isIpadPro ? "1.5vw" : "1vw",
-                        lineHeight: "2vw",
-                        fontFamily: "Poppins",
+                        fontSize: "0.875rem",
+                        lineHeight: 1.5,
+                        fontFamily: "Poppins, sans-serif",
                       }}
                     >
                       Eligibility Checker
@@ -1107,7 +1138,7 @@ export default function ResponsiveAppBar() {
               onClick={isTouch ? (b2bAnchorEl ? handleB2bMenuClose : handleB2bMenuOpen) : handleB2bMenuOpen}
               onMouseEnter={isTouch ? undefined : (e) => openMenu(setB2bAnchorEl, e)}
               onMouseLeave={isTouch ? undefined : () => closeMenu(setB2bAnchorEl)}
-              endIcon={<ArrowDropDownIcon sx={{ fontSize: "1.1rem !important", ml: "-2px" }} />}
+              endIcon={<ArrowDropDownIcon sx={{ fontSize: "1.05rem !important", ml: "-3px", mr: "-2px" }} />}
               disableRipple
               sx={navButtonSx}
             >
@@ -1139,9 +1170,9 @@ export default function ResponsiveAppBar() {
                     <Typography
                       sx={{
                         color: "black",
-                        fontSize: isIpadPro ? "1.5vw" : "1vw",
-                        lineHeight: "2vw",
-                        fontFamily: "Poppins",
+                        fontSize: "0.875rem",
+                        lineHeight: 1.5,
+                        fontFamily: "Poppins, sans-serif",
                       }}
                     >
                       Realtor
@@ -1157,9 +1188,9 @@ export default function ResponsiveAppBar() {
                     <Typography
                       sx={{
                         color: "black",
-                        fontSize: isIpadPro ? "1.5vw" : "1vw",
-                        lineHeight: "2vw",
-                        fontFamily: "Poppins",
+                        fontSize: "0.875rem",
+                        lineHeight: 1.5,
+                        fontFamily: "Poppins, sans-serif",
                       }}
                     >
                       Channel Partner/Broker
@@ -1182,6 +1213,18 @@ export default function ResponsiveAppBar() {
             </Button>
             <NavDivider />
 
+            {/* CIBIL Report button */}
+            <Button
+              component={Link}
+              href={getWebUrl("/download-cibil")}
+              onClick={topFunction}
+              disableRipple
+              sx={navButtonSx}
+            >
+              CIBIL Report
+            </Button>
+            <NavDivider />
+
             {/* Regulatory button */}
             <Button
               aria-controls={regulatoryAnchorEl ? "regulatory-menu-appbar" : undefined}
@@ -1189,7 +1232,7 @@ export default function ResponsiveAppBar() {
               onClick={isTouch ? (regulatoryAnchorEl ? handleRegulatoryMenuClose : handleRegulatoryMenuOpen) : handleRegulatoryMenuOpen}
               onMouseEnter={isTouch ? undefined : (e) => openMenu(setRegulatoryAnchorEl, e)}
               onMouseLeave={isTouch ? undefined : () => closeMenu(setRegulatoryAnchorEl)}
-              endIcon={<ArrowDropDownIcon sx={{ fontSize: "1.1rem !important", ml: "-2px" }} />}
+              endIcon={<ArrowDropDownIcon sx={{ fontSize: "1.05rem !important", ml: "-3px", mr: "-2px" }} />}
               disableRipple
               sx={navButtonSx}
             >
@@ -1232,9 +1275,9 @@ export default function ResponsiveAppBar() {
                     <Typography
                       sx={{
                         color: "black",
-                        fontSize: isIpadPro ? "1.5vw" : "1vw",
-                        lineHeight: "2vw",
-                        fontFamily: "Poppins",
+                        fontSize: "0.875rem",
+                        lineHeight: 1.5,
+                        fontFamily: "Poppins, sans-serif",
                       }}
                     >
                       Compliance
@@ -1253,9 +1296,9 @@ export default function ResponsiveAppBar() {
                     <Typography
                       sx={{
                         color: "black",
-                        fontSize: isIpadPro ? "1.5vw" : "1vw",
-                        lineHeight: "2vw",
-                        fontFamily: "Poppins",
+                        fontSize: "0.875rem",
+                        lineHeight: 1.5,
+                        fontFamily: "Poppins, sans-serif",
                       }}
                     >
                       Fair Practices Code
@@ -1274,9 +1317,9 @@ export default function ResponsiveAppBar() {
                     <Typography
                       sx={{
                         color: "black",
-                        fontSize: isIpadPro ? "1.5vw" : "1vw",
-                        lineHeight: "2vw",
-                        fontFamily: "Poppins",
+                        fontSize: "0.875rem",
+                        lineHeight: 1.5,
+                        fontFamily: "Poppins, sans-serif",
                       }}
                     >
                       Grievance Policy
@@ -1295,9 +1338,9 @@ export default function ResponsiveAppBar() {
                     <Typography
                       sx={{
                         color: "black",
-                        fontSize: isIpadPro ? "1.5vw" : "1vw",
-                        lineHeight: "2vw",
-                        fontFamily: "Poppins",
+                        fontSize: "0.875rem",
+                        lineHeight: 1.5,
+                        fontFamily: "Poppins, sans-serif",
                       }}
                     >
                       Privacy Policy
@@ -1316,9 +1359,9 @@ export default function ResponsiveAppBar() {
                     <Typography
                       sx={{
                         color: "black",
-                        fontSize: isIpadPro ? "1.5vw" : "1vw",
-                        lineHeight: "2vw",
-                        fontFamily: "Poppins",
+                        fontSize: "0.875rem",
+                        lineHeight: 1.5,
+                        fontFamily: "Poppins, sans-serif",
                       }}
                     >
                       Terms and Condition
@@ -1348,24 +1391,28 @@ export default function ResponsiveAppBar() {
               component={Link}
               href={getWebUrl("/application-form")}
               onClick={topFunction}
+              disableRipple
               sx={{
-                height: "36px",
+                height: { lg: "34px", xl: "38px" },
                 textTransform: "none",
-                fontSize: { md: "0.76rem", lg: "0.84rem", xl: "0.9rem" },
+                fontSize: { lg: "0.78rem", xl: "0.86rem" },
                 minWidth: "auto",
                 borderRadius: "22px",
-                px: { md: "10px", lg: "14px", xl: "18px" },
-                ml: { md: "2px", lg: "6px" },
+                px: { lg: "12px", xl: "18px" },
+                ml: { lg: "3px", xl: "8px" },
+                flexShrink: 0,
+                whiteSpace: "nowrap",
                 backgroundColor: "transparent",
-                border: ".12rem solid #204ed8",
+                border: "1.5px solid #204ed8",
                 color: "#204ed8",
-                fontFamily: "Poppins",
+                fontFamily: "Poppins, sans-serif",
                 fontWeight: 600,
-                transition: "all 250ms ease-in-out",
+                transition: "all 200ms ease-in-out",
+                boxSizing: "border-box",
                 "&:hover": {
-                  backgroundColor: "#204ed8",
+                  backgroundColor: "#204ed8 !important",
                   color: "#fff !important",
-                  transform: "scale(1.05)",
+                  transform: "translateY(-1px)",
                   boxShadow: "0 4px 12px rgba(32, 78, 216, 0.25)",
                 },
                 "&.MuiButton-root": {
@@ -1412,14 +1459,14 @@ export default function ResponsiveAppBar() {
                   onMouseLeave={isTouch ? undefined : () => closeMenu(setUserMenuAnchorEl)}
                   endIcon={<ArrowDropDownIcon />}
                   sx={{
-                    fontSize: isIpadPro ? "1vw" : "1vw",
+                    fontSize: "0.85rem",
                     textTransform: "none",
                     color: theme.palette.text.primary,
-                    fontFamily: "Poppins",
-                    fontWeight: 400,
+                    fontFamily: "Poppins, sans-serif",
+                    fontWeight: 500,
                     ":hover": {
-                      transform: "scale(1.1)",
-                      transition: "all 300ms ease-in-out",
+                      transform: "scale(1.05)",
+                      transition: "all 200ms ease-in-out",
                     },
                   }}
                 >
@@ -1461,9 +1508,9 @@ export default function ResponsiveAppBar() {
                     <MenuItem
                       sx={{
                         color: "black",
-                        fontFamily: "Poppins",
-                        fontSize: isIpadPro ? "1.5vw" : "1vw",
-                        lineHeight: "2vw",
+                        fontFamily: "Poppins, sans-serif",
+                        fontSize: "0.875rem",
+                        lineHeight: 1.5,
                       }}
                       onClick={() => {
                         handleUserMenuClose();
@@ -1475,9 +1522,9 @@ export default function ResponsiveAppBar() {
                     <MenuItem
                       sx={{
                         color: "black",
-                        fontFamily: "Poppins",
-                        fontSize: isIpadPro ? "1.5vw" : "1vw",
-                        lineHeight: "2vw",
+                        fontFamily: "Poppins, sans-serif",
+                        fontSize: "0.875rem",
+                        lineHeight: 1.5,
                       }}
                       onClick={() => {
                         handleUserMenuClose();
@@ -1489,9 +1536,9 @@ export default function ResponsiveAppBar() {
                     <MenuItem
                       sx={{
                         color: "black",
-                        fontFamily: "Poppins",
-                        fontSize: isIpadPro ? "1.5vw" : "1vw",
-                        lineHeight: "2vw",
+                        fontFamily: "Poppins, sans-serif",
+                        fontSize: "0.875rem",
+                        lineHeight: 1.5,
                       }}
                       onClick={() => {
                         handleUserMenuClose();
@@ -1503,9 +1550,9 @@ export default function ResponsiveAppBar() {
                     <MenuItem
                       sx={{
                         color: "black",
-                        fontFamily: "Poppins",
-                        fontSize: isIpadPro ? "1.5vw" : "1vw",
-                        lineHeight: "2vw",
+                        fontFamily: "Poppins, sans-serif",
+                        fontSize: "0.875rem",
+                        lineHeight: 1.5,
                       }}
                       onClick={handleResetPassword}
                     >
@@ -1514,9 +1561,9 @@ export default function ResponsiveAppBar() {
                     <MenuItem
                       sx={{
                         color: "black",
-                        fontFamily: "Poppins",
-                        fontSize: isIpadPro ? "1.5vw" : "1vw",
-                        lineHeight: "2vw",
+                        fontFamily: "Poppins, sans-serif",
+                        fontSize: "0.875rem",
+                        lineHeight: 1.5,
                       }}
                       onClick={handleLogout}
                     >

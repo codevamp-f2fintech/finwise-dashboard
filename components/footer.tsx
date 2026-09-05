@@ -51,15 +51,11 @@ export function Footer() {
             >
               <a
                 href={getWebUrl("/")}
-                style={{
-                  color: "#fff",
-                  textDecoration: "none",
-                }}
+                style={{ color: "#fff", textDecoration: "none" }}
               >
                 F2 Fintech
               </a>
             </Typography>
-
             <Typography
               sx={{
                 color: "#fff",
@@ -95,10 +91,7 @@ export function Footer() {
                 { text: "Careers", href: "/careers" },
                 { text: "Contact Us", href: "/contact-us" },
               ].map((item, index) => (
-                <Typography
-                  key={index}
-                  sx={{ lineHeight: "2rem", fontSize: "1rem" }}
-                >
+                <Typography key={index} sx={{ lineHeight: "2rem", fontSize: "1rem" }}>
                   <a
                     href={getWebUrl(item.href)}
                     style={{
@@ -108,9 +101,7 @@ export function Footer() {
                       fontFamily: "var(--font-poppins), Poppins, sans-serif",
                       transition: "color 0.3s ease",
                     }}
-                    onMouseEnter={(e) =>
-                      (e.currentTarget.style.color = "#FFD700")
-                    }
+                    onMouseEnter={(e) => (e.currentTarget.style.color = "#FFD700")}
                     onMouseLeave={(e) => (e.currentTarget.style.color = "white")}
                   >
                     {item.text}
@@ -142,10 +133,7 @@ export function Footer() {
                 { text: "Terms and Condition", href: "/terms-and-condition" },
                 { text: "Cookie Settings", href: "/cookie-settings" },
               ].map((item, index) => (
-                <Typography
-                  key={index}
-                  sx={{ lineHeight: "2rem", fontSize: "1rem" }}
-                >
+                <Typography key={index} sx={{ lineHeight: "2rem", fontSize: "1rem" }}>
                   <a
                     href={getWebUrl(item.href)}
                     style={{
@@ -155,9 +143,7 @@ export function Footer() {
                       fontFamily: "var(--font-poppins), Poppins, sans-serif",
                       transition: "color 0.3s ease",
                     }}
-                    onMouseEnter={(e) =>
-                      (e.currentTarget.style.color = "#FFD700")
-                    }
+                    onMouseEnter={(e) => (e.currentTarget.style.color = "#FFD700")}
                     onMouseLeave={(e) => (e.currentTarget.style.color = "white")}
                   >
                     {item.text}
@@ -168,7 +154,7 @@ export function Footer() {
           </Grid>
 
           {/* Column 4: Products */}
-          <Grid item xs={6} sm="auto" sx={{ textAlign: "left" }}>
+          <Grid item xs={12} sm="auto" sx={{ textAlign: "left" }}>
             <Typography
               sx={{
                 fontWeight: 650,
@@ -193,10 +179,7 @@ export function Footer() {
                 { text: "DSA Partner", href: "/dsa" },
                 { text: "Realtor Partner", href: "/realtor" },
               ].map((product, index) => (
-                <Typography
-                  key={index}
-                  sx={{ lineHeight: "2rem", fontSize: "1rem" }}
-                >
+                <Typography key={index} sx={{ lineHeight: "2rem", fontSize: "1rem" }}>
                   <a
                     href={getWebUrl(product.href)}
                     style={{
@@ -241,9 +224,7 @@ export function Footer() {
                 mx: 0,
                 transition: "transform 0.3s ease",
                 cursor: "pointer",
-                "&:hover": {
-                  transform: "scale(1.05)",
-                },
+                "&:hover": { transform: "scale(1.05)" },
               }}
             >
               <Box
@@ -259,7 +240,6 @@ export function Footer() {
                   padding: "8px",
                 }}
               />
-              {/* Blinking "Click Here" Overlay */}
               <Box
                 sx={{
                   position: "absolute",
@@ -297,7 +277,7 @@ export function Footer() {
                 fontFamily: "var(--font-dm-sans), 'DM Sans', sans-serif",
               }}
             >
-              Let's Connect
+              Let&apos;s Connect
             </Typography>
 
             <Stack
@@ -307,59 +287,19 @@ export function Footer() {
               gap={1.5}
               sx={{ mt: 1, color: "white" }}
             >
-              <a
-                href="https://www.facebook.com/f2fintech/"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ color: "inherit", display: "flex", alignItems: "center", transition: "color 0.3s ease" }}
-                aria-label="Follow us on Facebook"
-                onMouseEnter={(e) => (e.currentTarget.style.color = "#FFD700")}
-                onMouseLeave={(e) => (e.currentTarget.style.color = "inherit")}
-              >
+              <a href="https://www.facebook.com/f2fintech/" target="_blank" rel="noopener noreferrer" style={{ color: "inherit", display: "flex", alignItems: "center", transition: "color 0.3s ease" }} aria-label="Follow us on Facebook" onMouseEnter={(e) => (e.currentTarget.style.color = "#FFD700")} onMouseLeave={(e) => (e.currentTarget.style.color = "inherit")}>
                 <FaFacebook size={19} />
               </a>
-              <a
-                href="https://www.youtube.com/channel/UCMyV4yKd27_Vx3Sq2FSDN5A"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ color: "inherit", display: "flex", alignItems: "center", transition: "color 0.3s ease" }}
-                aria-label="Follow us on YouTube"
-                onMouseEnter={(e) => (e.currentTarget.style.color = "#FFD700")}
-                onMouseLeave={(e) => (e.currentTarget.style.color = "inherit")}
-              >
+              <a href="https://www.youtube.com/channel/UCMyV4yKd27_Vx3Sq2FSDN5A" target="_blank" rel="noopener noreferrer" style={{ color: "inherit", display: "flex", alignItems: "center", transition: "color 0.3s ease" }} aria-label="Follow us on YouTube" onMouseEnter={(e) => (e.currentTarget.style.color = "#FFD700")} onMouseLeave={(e) => (e.currentTarget.style.color = "inherit")}>
                 <IoLogoYoutube size={21} />
               </a>
-              <a
-                href="https://www.instagram.com/f2fintech_official?utm_source=ig_web_button_share_sheet&igsi=ZDNlZDc0MzIxNw=="
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ color: "inherit", display: "flex", alignItems: "center", transition: "color 0.3s ease" }}
-                aria-label="Follow us on Instagram"
-                onMouseEnter={(e) => (e.currentTarget.style.color = "#FFD700")}
-                onMouseLeave={(e) => (e.currentTarget.style.color = "inherit")}
-              >
+              <a href="https://www.instagram.com/f2fintech_official?utm_source=ig_web_button_share_sheet&igsi=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer" style={{ color: "inherit", display: "flex", alignItems: "center", transition: "color 0.3s ease" }} aria-label="Follow us on Instagram" onMouseEnter={(e) => (e.currentTarget.style.color = "#FFD700")} onMouseLeave={(e) => (e.currentTarget.style.color = "inherit")}>
                 <AiFillInstagram size={21} />
               </a>
-              <a
-                href="https://www.linkedin.com/company/f2fintech"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ color: "inherit", display: "flex", alignItems: "center", transition: "color 0.3s ease" }}
-                aria-label="Follow us on LinkedIn"
-                onMouseEnter={(e) => (e.currentTarget.style.color = "#FFD700")}
-                onMouseLeave={(e) => (e.currentTarget.style.color = "inherit")}
-              >
+              <a href="https://www.linkedin.com/company/f2fintech" target="_blank" rel="noopener noreferrer" style={{ color: "inherit", display: "flex", alignItems: "center", transition: "color 0.3s ease" }} aria-label="Follow us on LinkedIn" onMouseEnter={(e) => (e.currentTarget.style.color = "#FFD700")} onMouseLeave={(e) => (e.currentTarget.style.color = "inherit")}>
                 <LinkedInIcon style={{ fontSize: "22px" }} />
               </a>
-              <a
-                href="https://wa.me/918810600135"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ color: "inherit", display: "flex", alignItems: "center", transition: "color 0.3s ease" }}
-                aria-label="Contact us on WhatsApp"
-                onMouseEnter={(e) => (e.currentTarget.style.color = "#FFD700")}
-                onMouseLeave={(e) => (e.currentTarget.style.color = "inherit")}
-              >
+              <a href="https://wa.me/918810600135" target="_blank" rel="noopener noreferrer" style={{ color: "inherit", display: "flex", alignItems: "center", transition: "color 0.3s ease" }} aria-label="Contact us on WhatsApp" onMouseEnter={(e) => (e.currentTarget.style.color = "#FFD700")} onMouseLeave={(e) => (e.currentTarget.style.color = "inherit")}>
                 <IoLogoWhatsapp size={21} />
               </a>
             </Stack>
@@ -400,4 +340,5 @@ export function Footer() {
     </Container>
   )
 }
+
 export default Footer
